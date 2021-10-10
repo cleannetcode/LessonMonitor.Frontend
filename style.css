@@ -1,0 +1,92 @@
+header {
+    position: fixed;
+    width: 100%;
+    opacity: 60%;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+main {
+    margin: 210px auto 10px auto;
+    width: 80%;
+}
+
+a {
+    text-decoration: none;
+}
+
+html, body {
+    margin: 0px;
+    padding: 0px;
+}
+
+/* flex box magic */
+
+/* .fruit-card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgb(107, 221, 236);
+    border-radius: 20px;
+    text-align: center;
+    order: 1;
+}
+
+.fruit-photo {
+    width: 100px;
+    height: auto;
+}
+
+.fruits-container {
+    margin-top: 5px;
+    padding: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    border: 1px solid rgb(124, 77, 16);
+    border-radius: 20px;
+} */
+
+/* grid magic */
+
+.fruit-card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgb(107, 221, 236);
+    text-align: center;
+    border-radius: 20px;
+    width: 100px;
+}
+
+.fruit-photo {
+    width: 100px;
+    height: auto;
+}
+
+.fruits-container {
+    margin-top: 5px;
+    padding: 5px;
+    border: 1px solid rgb(124, 77, 16);
+    border-radius: 20px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: minmax(10px, 200px);
+}
+
+.box {
+    background-color: rgb(243, 208, 144);
+    border: 1px solid rgb(47, 36, 0);
+    border-radius: 20px;
+}
+
+.box-1 {
+    grid-area: 1 / 1 / 3 / 4;
+    /* grid-column: 1 / 4;
+    grid-row: 1 / 3; */
+    z-index: 1;
+}
+
+.box-2 {
+    grid-area: 2 / 1 / 4 / 2;
+}
