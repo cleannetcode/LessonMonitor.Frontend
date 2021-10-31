@@ -78,11 +78,7 @@ const toggleDone = (event) => {
 
         dbNote.forEach(note => {
             if (note.id == target.dataset.id) {
-
-                if (note.isDone = !note.isDone) {
-                    note.isDone = true;
-                }
-
+                note.isDone = !note.isDone
                 init();
             }
         });
