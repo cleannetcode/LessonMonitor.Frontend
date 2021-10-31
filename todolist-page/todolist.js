@@ -1,70 +1,87 @@
-let issues = [
-	{ name: 'item 1', isDone: false },
-	{ name: 'item 2', isDone: false },
-	{ name: 'item 3', isDone: false },
-	{ name: 'item 4', isDone: false }
-];
+'use strict';
 
-let printIssues = function () {
-	let issuesElement = document.getElementById('issues');
-	issuesElement.innerHTML = null;
+function Application() {
+	const issues = [
+		new Issue('item 1'),
+		new Issue('item 2'),
+		new Issue('item 3'),
+		new Issue('item 4')
+	];
 
-	for (let index = 0; index < issues.length; index++) {
-		const issue = issues[index];
-
-		const issueId = composeIssueId(index);
-		if (document.getElementById(issueId)) {
-			continue;
-		}
-
-		let issueElement = document.createElement('li');
-		issueElement.id = issueId;
-
-		let issueNameElement = document.createElement('span');
-		issueNameElement.innerText = issue.name;
-		issueNameElement.style.textDecoration = issue.isDone ? 'line-through' : null;
-
-		let toggleDoneButton = document.createElement('button');
-		toggleDoneButton.onclick = (e) => toggleDone(index);
-		toggleDoneButton.innerText = 'Done';
-
-		let deleteIssueButton = document.createElement('button');
-		deleteIssueButton.onclick = (e) => deleteIssue(index);
-		deleteIssueButton.innerText = 'Delete';
-
-		issueElement.append(issueNameElement);
-		issueElement.append(toggleDoneButton);
-		issueElement.append(deleteIssueButton);
-
-		issuesElement.append(issueElement);
+	this.start = function () {
+		this.printIssues();
 	}
-}
-printIssues();
 
-let issueName = document.getElementById('issue-name');
+	this.printIssues = function () {
+		let issuesElement = document.getElementById('issues');
+		issuesElement.innerHTML = null;
 
-function createNewIssue()
-{
-	let issue = {
-		name: issueName.value,
-		isDone: false
+		for (let index = 0; index < issues.length; index++) {
+			const issue = issues[index];
+
+			const issueId = composeIssueId(index);
+			if (document.getElementById(issueId)) {
+				continue;
+			}
+
+			let issueElement = document.createElement('li');
+			issueElement.id = issueId;
+
+			let issueNameElement = document.createElement('span');
+			issueNameElement.innerText = issue.name;
+			issueNameElement.style.textDecoration = issue.isDone ? 'line-through' : null;
+
+			let toggleDoneButton = document.createElement('button');
+			toggleDoneButton.onclick = (e) => this.toggleDone(index);
+			toggleDoneButton.innerText = 'Done';
+
+			let deleteIssueButton = document.createElement('button');
+			deleteIssueButton.onclick = (e) => this.deleteIssue(index);
+			deleteIssueButton.innerText = 'Delete';
+
+			issueElement.append(issueNameElement);
+			issueElement.append(toggleDoneButton);
+			issueElement.append(deleteIssueButton);
+
+			issuesElement.append(issueElement);
+		}
 	};
 
-	issues.push(issue);
-	printIssues();
+	const issueName = document.getElementById('issue-name');
+
+	this.createNewIssue = function () {
+		const issue = new Issue(issueName.value);
+		issues.push(issue);
+		this.printIssues();
+	}
+
+	this.deleteIssue = function (index) {
+		issues.splice(index, 1);
+		this.printIssues();
+	}
+
+	this.toggleDone = function (index) {
+		issues[index].toggleDone();
+		this.printIssues();
+	}
+
+	function composeIssueId(issueId) {
+		return `issue-${issueId}`;
+	}
 }
 
-function deleteIssue(index) {
-	issues.splice(index, 1);
-	printIssues();
+function Issue(name) {
+	this.name = name;
+	this.isDone = false;
+	this.toggleDone = function () {
+		this.isDone = !this.isDone;
+	}
 }
 
-function toggleDone(index) {
-	let issue = issues[index];
-	issue.isDone = !issue.isDone;
-	printIssues();
+function Task(name, description) {
+	Issue.call(this, name);
+	this.description = description;
 }
 
-function composeIssueId(issueId) {
-	return `issue-${issueId}`;
-}
+const app = new Application();
+app.start();
