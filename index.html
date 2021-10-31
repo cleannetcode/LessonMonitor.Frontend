@@ -1,18 +1,321 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Cleannetcode</title>
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=10.0">
-    <title>Index</title>
-</head>
+    <!-- Custom styles for this template -->
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/normalize.css" />
+    <script defer src="js/script.js"></script>
+  </head>
+  <body>
+    <header class="header" id="header">
+      <div class="container">
+        <div class="navigation">
+          <div class="navigation-logo">
+            <a href="#header" class="navigation__text">
+              <strong class="navigation__text_blue">Cleannet</strong>code
+            </a>
+            <p class="navigation__description">
+              Сообщество для тех, кому интересно изучать .net и C#
+            </p>
+          </div>
+          <div class="navigation-menu">
+            <nav>
+              <ul class="menu">
+                <li class="menu__item">
+                  <a href="#repository" class="menu__link">Repositories</a>
+                </li>
+                <li class="menu__item">
+                  <a href="#people" class="menu__link">People</a>
+                </li>
+                <li class="menu__item">
+                  <a href="#" class="menu__link">Teams</a>
+                </li>
+                <li class="menu__item">
+                  <a href="#" class="menu__link">Projects</a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </header>
 
-<body>
-	<ul>
-		<li><a href="layout-page/layout.html">Layout</a></li>
-		<li><a href="todolist-page/todolist.html">Todo list app</a></li>
-	</ul>
-</body>
+    <main class="main">
+      <div class="container">
+        <div class="main-section">
+          <div class="main-title">
+            Задумка канала в том, чтобы собрать людей, которым хочется изучать программирование.<br />
+            В частности платформу <span class="navigation__text_blue">.NET</span> и язык
+            программирования <span class="navigation__text_blue">C#</span>.
+          </div>
+          <div class="main-section-videos">
+            <div class="main-section__video iframe-container shadow">
+              <iframe
+                id="#main-video"
+                width="560"
+                height="314"
+                src="https://www.youtube.com/embed/cqBLVTUsssU"
+                title="YouTube video player"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+              >
+              </iframe>
+            </div>
+            <div class="main-section__video iframe-container shadow">
+              <iframe
+                id="#main-video"
+                width="560"
+                height="314"
+                src="https://www.youtube.com/embed/ZY8rldXzGa8"
+                title="YouTube video player"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+              >
+              </iframe>
+            </div>
+            <div class="main-section__video iframe-container shadow">
+              <iframe
+                id="#main-video"
+                width="560"
+                height="314"
+                src="https://www.youtube.com/embed/5ei_HCcN_Fw"
+                title="YouTube video player"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+              >
+              </iframe>
+            </div>
+            <div class="main-section__video iframe-container shadow">
+              <iframe
+                id="#main-video"
+                width="560"
+                height="314"
+                src="https://www.youtube.com/embed/gTIoEFg2R_E"
+                title="YouTube video player"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+              >
+              </iframe>
+            </div>
+          </div>
 
+          <div class="main-section__description">
+            Если вы новичок с горящими глазами, полные желания стать разработчиком или вы
+            продолжающий специалист, который ищет себе товарищей по цеху, тогда вы попали по адресу.
+            Стримы проходят каждую субботу и воскресенье в 18:00. На занятиях я рассказываю про
+            технологии и подходы, которые применял или применяю в разработке. А также вместе с вами
+            на живую пробую всякие новые штуки. Вместе разбираться всегда веселее. У вас есть
+            отличная возможности присоединиться к нашему дружному комьюнити и постигать разработку!
+            <br />
+            <br />
+          </div>
+
+          <span class="main-section__span">Все стримы доступны в записи ;)</span>
+        </div>
+      </div>
+    </main>
+
+    <section class="repository" id="repository">
+      <div class="container">
+        <div class="repository-title title">Repositories</div>
+        <div class="repository-items">
+          <div class="repository__item shadow">
+            <div class="repository__item_title">
+              <span class="repository__item_text">LessonMonitor</span>
+            </div>
+            <a
+              href="https://github.com/cleannetcode/Lvis/tree/develop"
+              alt="Lvis"
+              class="repository__hoverscreen"
+              target="_blank"
+            >
+              <p class="repository__hoverscreen_text">
+                Web API по сбору статистики для преподавателя о посещаемости студентами лекций
+              </p>
+            </a>
+          </div>
+          <div class="repository__item shadow">
+            <div class="repository__item_title">
+              <span class="repository__item_text">TssT</span>
+            </div>
+            <a
+              href="https://github.com/cleannetcode/TssT/tree/develop"
+              alt="TssT"
+              class="repository__hoverscreen"
+              target="_blank"
+            >
+              <p class="repository__hoverscreen_text">
+                Проект-Домашка для тех кто изучает C#, dotnet core, aspnet core, mssql, ef core и
+                так далее
+              </p>
+            </a>
+          </div>
+          <div class="repository__item shadow">
+            <div class="repository__item_title">
+              <span class="repository__item_text">Awesome-shop</span>
+            </div>
+            <a
+              href="https://github.com/cleannetcode/awesome-shop/tree/develop"
+              alt="Awesome-shop"
+              class="repository__hoverscreen"
+              target="_blank"
+            >
+              <p class="repository__hoverscreen_text">
+                AwesomeShop - проект, первой команды хакатона
+              </p>
+            </a>
+          </div>
+          <div class="repository__item shadow">
+            <div class="repository__item_title">
+              <span class="repository__item_text">API-FlowersStore</span>
+            </div>
+            <a
+              href="https://github.com/cleannetcode/API-FlowersStore/tree/develop"
+              alt="API-FlowersStore"
+              class="repository__hoverscreen"
+              target="_blank"
+            >
+              <p class="repository__hoverscreen_text">
+                API-FlowersStore - проект, второй команды хакатона
+              </p>
+            </a>
+          </div>
+          <div class="repository__item shadow">
+            <div class="repository__item_title">
+              <span class="repository__item_text">Lvis</span>
+            </div>
+            <a
+              href="https://github.com/cleannetcode/Lvis/tree/develop"
+              alt="Lvis"
+              class="repository__hoverscreen"
+              target="_blank"
+            >
+              <p class="repository__hoverscreen_text">Проект-YouTubeChatBot</p>
+            </a>
+          </div>
+          <div class="repository__item shadow">
+            <div class="repository__item_title">
+              <span class="repository__item_text">CsharpForBeginners</span>
+            </div>
+            <a
+              href="https://github.com/cleannetcode/CsharpForBeginners/tree/develop"
+              alt="CsharpForBeginners"
+              class="repository__hoverscreen"
+              target="_blank"
+            >
+              <p class="repository__hoverscreen_text">Лекции с уроков по С# для начинающих</p>
+            </a>
+          </div>
+          <div class="repository__item shadow">
+            <div class="repository__item_title">
+              <span class="repository__item_text">Timesheet</span>
+            </div>
+            <a
+              href="https://github.com/cleannetcode/Timesheet/tree/develop"
+              alt="Timesheet"
+              class="repository__hoverscreen"
+              target="_blank"
+            >
+              <p class="repository__hoverscreen_text">
+                Задача - разработать приложение, которое позволит вести учет отработанных часов
+                сотрудников и рассчитывать заработную плату.
+              </p>
+            </a>
+          </div>
+          <div class="repository__item shadow">
+            <div class="repository__item_title">
+              <span class="repository__item_text">SocialMediator</span>
+            </div>
+            <a
+              href="https://github.com/cleannetcode/SocialMediator"
+              alt="SocialMediator"
+              class="repository__hoverscreen"
+              target="_blank"
+            >
+              <p class="repository__hoverscreen_text">Что-то магическое</p>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- <section class="people" id="people">
+      <div class="container">
+        <div class="people-title title">People</div>
+      </div>
+    </section> -->
+
+    <section class="social" id="social">
+      <div class="container">
+        <div class="social-title title">Присоединяйтесь к нашему сообществу</div>
+        <ul class="social-items">
+          <a href="https://www.youtube.com/c/RomanTrufanovDev/featured" target="_blank">
+            <li class="social__item youtube selected" selected="true">
+              <img class="youtube-image" src="img/social/youtube.svg" alt="youtube" />
+              <i class="fa fa-youtube"></i>
+            </li>
+          </a>
+          <a href="https://discord.com/invite/XwfjyHxAnF" target="_blank">
+            <li class="social__item discord selected" selected="true">
+              <img class="discord-image" src="img/social/discord.svg" alt="discord" />
+              <i class="fa fa-discord"></i>
+            </li>
+          </a>
+          <a href="https://t.me/joinchat/ETnMMXnhJng4YmJi" target="_blank">
+            <li class="social__item telegram selected" selected="true">
+              <img class="telegram-image" src="img/social/telegram.svg" alt="telegram" />
+              <i class="fa fa-telegram"></i>
+            </li>
+          </a>
+        </ul>
+      </div>
+    </section>
+
+    <section class="todo">
+      <div class="container">
+        <h3 class="title todo-title">Список заметок</h3>
+        <ul class="todo__list">
+          <!-- Render from JS -->
+        </ul>
+      </div>
+    </section>
+
+    <section class="note">
+      <div class="container">
+        <h3>Что необходимо сделать для сайта?</h3>
+        <form id="form">
+          <label>
+            <input
+              type="text"
+              class="note__fields note__name"
+              placeholder="Наименование операции"
+            />
+          </label>
+          <button type="submit" class="note__add">Добавить заметку</button>
+        </form>
+      </div>
+    </section>
+
+    <footer class="footer" id="footer">
+      <div class="container">
+        <div class="navigation-logo">
+          <a href="#header" class="navigation__text">
+            <strong class="navigation__text_blue">Cleannet</strong>code
+          </a>
+          <p class="navigation__description">
+            Сообщество для тех, кому интересно изучать .net и C#
+          </p>
+        </div>
+      </div>
+    </footer>
+  </body>
 </html>
