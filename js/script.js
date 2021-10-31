@@ -6,7 +6,7 @@ const todoList = document.querySelector('.todo__list'),
     form = document.querySelector('#form'),
     noteName = document.querySelector('.note__name');
 
-let dbNote = JSON.parse(localStorage.getItem('calc')) || [];
+let dbNote = JSON.parse(localStorage.getItem('todo')) || [];
 
 const renderNote = (note) => {
     const listItem = document.createElement('li');
@@ -79,9 +79,7 @@ const toggleDone = (event) => {
         dbNote.forEach(note => {
             if (note.id == target.dataset.id) {
 
-                if (note.isDone) {
-                    note.isDone = false;
-                } else {
+                if (note.isDone = !note.isDone) {
                     note.isDone = true;
                 }
 
@@ -94,7 +92,7 @@ const toggleDone = (event) => {
 const init = () => {
     todoList.textContent = '';
     dbNote.forEach(renderNote);
-    localStorage.setItem('calc', JSON.stringify(dbNote));
+    localStorage.setItem('todo', JSON.stringify(dbNote));
 };
 
 form.addEventListener('submit', addNote);
