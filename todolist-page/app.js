@@ -1,64 +1,114 @@
-let issues = [];
-let newIssueText = '';
+const TaskStatuses = {
+    Default: "Default",
+    IsDone: "IsDone"
+};
 
-let input = document.querySelector('input');
-let button = document.querySelector('button');
+const taskService = {
 
-input.onchange = function(e){
-    newIssueText = e.target.value;
-}
+    tasks: [],
 
-button.onclick = function(e){
-    addNewIssue(newIssueText);
-}
+    Add: function(task){
+        if (typeof task !== 'object') return;
+        if (task.text == '') return;
 
-function addNewIssue(issue){
+        if (this.tasks.filter(x=>x.text == task.text).length > 0) return;
 
-    if (issue == '') return;
-    if (issues.includes(issue)) return;
+        task.id = Math.random().toString(36).substr(2, 9);
+        task.status = TaskStatuses.Default;
 
-    issues.push(issue);
-    
-    input.value = '';
-    renderList();
-}
+        this.tasks.push(task);
+        
+        newTaskTextInput.value = '';
+        renderList(this.Get());
+    },
 
-function removeIssue(issue){
+    Remove: function(taskId){
+        var findTasks = tasks.filter(x=>x.id == taskId);
 
-    if (issues.includes(issue)){
-        const idx = issues.indexOf(issue);
-        if (idx > -1) {
-            issues.splice(idx, 1);
-            renderList();
+        if (findTasks.length > 0)
+        {
+            const idx = this.tasks.indexOf(findTasks[0]);
+            if (idx > -1) {
+                this.tasks.splice(idx, 1);
+                renderList(this.Get());
+            }
         }
+    },
+
+    SetStatus: function(taskId, taskStatus){
+        var findTasks = this.tasks.filter(x=>x.id == taskId);
+
+        if (findTasks.length > 0)
+        {
+            findTasks[0].status = taskStatus
+            renderList(this.Get());
+        }
+    },
+
+    Get(){
+        return this.tasks;
     }
-}
+};
 
-function renderList(){
-    let ul = document.querySelector('ul');
-    ul.innerHTML = '';
+let newTaskTextInput = document.querySelector('#newTaskTextInput');
+let addNewTaskButton = document.querySelector('#addNewTaskButton');
+let ul = document.querySelector('#taskslist');
 
-    issues.forEach(issue => {
-        renderListItem(ul, issue);
+addNewTaskButton.onclick = function(e){
+
+    taskService.Add({
+        text: newTaskTextInput.value,
+        isDone: false
     });
 }
 
-function renderListItem(ul, issue){
+
+function renderList(tasks){
+    
+    ul.innerHTML = '';
+
+    tasks.forEach(task => {
+        renderListItem(ul, task);
+    });
+}
+
+function renderListItem(ul, task){
+    
+    var checkbox = getCheckBoxElement(task);
     
     let itemTextContainer = document.createElement('span');
-    itemTextContainer.innerText = issue;
+    itemTextContainer.innerText = task.text;
 
     let itemRemoveButton = document.createElement('button');
     itemRemoveButton.innerText = 'удалить';
 
     let li = document.createElement('li');
+    li.setAttribute('data-id', task.id);
+    li.setAttribute('data-status', task.status);
 
+    li.appendChild(checkbox);
     li.appendChild(itemTextContainer);
     li.appendChild(itemRemoveButton);
 
     itemRemoveButton.onclick = function(e) {
-        removeIssue(e.target.parentNode.children[0].innerText);
+        taskService.Remove(task.id);
     }
 
     ul.appendChild(li);
+}
+
+function getCheckBoxElement(task){
+    let checkBox = document.createElement('input');
+    checkBox.classList.add('task__checker');
+    checkBox.setAttribute('id', `checkbox-${task.id}`);
+    checkBox.setAttribute('type','checkbox');
+
+    if (task.status == TaskStatuses.IsDone)
+        checkBox.setAttribute('checked', task.isDone);
+
+    checkBox.onchange = function(e){
+        taskService.SetStatus(task.id, (e.target.checked) ? TaskStatuses.IsDone : TaskStatuses.Default);
+    }
+
+    return checkBox;
 }

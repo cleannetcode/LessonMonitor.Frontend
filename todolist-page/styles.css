@@ -7,32 +7,34 @@ html, body {
 
 .container {
     height: inherit;
-    max-width: 1200px;
+    max-width: 600px;
+    width: 100%;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 10px;
     box-sizing: border-box;
-    
 }
 
 .container__top {
     display: flex;
+    width: 100%;
 }
 
-.container__top input {
+#newTaskTextInput {
     border: 1px solid #bdbdbd;
     padding: 5px 10px;
     border-radius: 4px 0px 0px 4px;
+    flex-grow: 1;
 }
 
-.container__top input:hover, .container__top input:focus {
+#newTaskTextInput:hover, #newTaskTextInput:focus {
     border-color:#288bc1;
     outline: none;
 }
 
-.container__top button {
+#addNewTaskButton {
     border-radius: 0px 4px 4px 0px;
     background-color: #1d74a3;
     border: 0;
@@ -40,28 +42,53 @@ html, body {
     cursor: pointer;
 }
 
-.container__top button:hover {
+#addNewTaskButton:hover {
     background-color: #288bc1;
 }
 
-.container ul {
+#taskslist {
     width: 100%;
     list-style-type: none;
     padding: 0;
 }
 
-.container ul > li {
-    padding: 5px 10px;
+#taskslist > li {
+    padding: 10px 5px 10px 5px;
     font-size: 18px;
     display: flex;
-    justify-content: space-between;
+    column-gap: 10px;
+    border-bottom: 1px solid #eee;
 }
 
-.container ul > li:hover {
-    background-color: #f3f3f3;   
+#taskslist > li:hover {
+    background-color: #f8f8f8;   
 }
 
-.container ul > li > button {
+#taskslist > li[data-status=IsDone]{
+    background-color: #45c47a;  
+    border-bottom: 1px solid #38ab68;
+}
+
+#taskslist > li[data-status=IsDone]:hover{
+    background-color: #5fcf8e;
+}
+
+#taskslist > li:first-child {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+#taskslist > li:last-child {
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+#taskslist > li > span{
+    flex: 1;
+    cursor: default;
+}
+
+#taskslist > li > button {
     display: none;
     background: transparent;
     color: #ad2222;
@@ -69,7 +96,14 @@ html, body {
     cursor: pointer;
 }
 
-.container ul > li:hover button {
+#taskslist > li:hover button {
     display: initial;
+}
+
+.task__checker {
     cursor: pointer;
+}
+
+.task__checker:checked ~span {
+    text-decoration: line-through;
 }
