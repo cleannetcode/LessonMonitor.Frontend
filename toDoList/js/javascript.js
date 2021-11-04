@@ -1,11 +1,11 @@
-let task = [
+let tasks = [
     { task: "task1", isDone: false },
     { task: "task2", isDone: false },
     { task: "task3", isDone: false },
     { task: "task4", isDone: false }
 ];
-let sectionTask = document.getElementById('section_task');
-let mytask = document.getElementById('mytask');
+let sectionTask = document.getElementById('task-section');
+let listingTask = document.getElementById('task-Listing');
 
 
 function printAddTask() {
@@ -27,23 +27,23 @@ function printAddTask() {
 function addNewTask(e) {
     let valueTask = document.getElementById('addNewTask').value;
     let newTask = { task: valueTask, isDone: false };
-    task.push(newTask);
-    mytask.innerHTML = '';
-    printTask();
+    tasks.push(newTask);
+    listingTask.innerHTML = '';
+    printTasks();
 }
 printAddTask();
 
-function printTask() {
-    for (let index = 0; index < task.length; index++) {
+function printTasks() {
+    for (let index = 0; index < tasks.length; index++) {
         let liTask = document.createElement('li');
         liTask.classList.add('task-border');
         liTask.id = index;
         let spanTask = document.createElement('span');
         spanTask.classList.add('spantask');
-        if (task[index].isDone == true) {
+        if (tasks[index].isDone == true) {
             spanTask.style.textDecoration = "line-through";
         }
-        spanTask.innerHTML = task[index].task;
+        spanTask.innerHTML = tasks[index].task;
         liTask.appendChild(spanTask);
 
         let buttonDone = document.createElement('button');
@@ -52,21 +52,21 @@ function printTask() {
         buttonDone.onclick = doneTask;
         liTask.appendChild(buttonDone);
 
-        let buttonDel = document.createElement('button');
-        buttonDel.innerText = '❌';
-        buttonDel.id = index;
-        buttonDel.onclick = deleteTask;
-        liTask.appendChild(buttonDel);
-        mytask.appendChild(liTask);
+        let buttonDelete = document.createElement('button');
+        buttonDelete.innerText = '❌';
+        buttonDelete.id = index;
+        buttonDelete.onclick = deleteTask;
+        liTask.appendChild(buttonDelete);
+        listingTask.appendChild(liTask);
     }
 }
-printTask();
+printTasks();
 
 function doneTask(e) {
     let id = e.target.id;
     let liter = document.getElementsByClassName('task-border')[id];
-    task[liter.id].isDone = !task[liter.id].isDone;
-    if (task[liter.id].isDone == true) {
+    tasks[liter.id].isDone = !tasks[liter.id].isDone;
+    if (tasks[liter.id].isDone == true) {
         (document.getElementById(liter.id)).style.textDecoration = "line-through";
     } else {
         (document.getElementById(liter.id)).style.textDecoration = "none";
@@ -76,7 +76,7 @@ function doneTask(e) {
 function deleteTask(e) {
     let id = e.target.id;
     let liter = document.getElementsByClassName('task-border')[id];
-    task.splice(liter.id, 1);
-    mytask.innerHTML = '';
-    printTask();
+    tasks.splice(liter.id, 1);
+    listingTask.innerHTML = '';
+    printTasks();
 }
