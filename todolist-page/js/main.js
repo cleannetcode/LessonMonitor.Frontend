@@ -22,7 +22,14 @@ function AddNewTask()
     let input = document.getElementById("newTaskName");
     let newTaskName = input.value;
     if (isEmptyString(newTaskName))
+    {
+        input.classList.add('error');
+        setTimeout(function() {
+            input.classList.remove('error');
+        }, 2000)
+
         return;
+    }
 
     input.value = "";
 
