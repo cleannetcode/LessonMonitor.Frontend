@@ -1,0 +1,10 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+.wrapper {
+    width: 80%;
+    padding-top: 10px;
+    /* margin: 0 auto; */
+}
