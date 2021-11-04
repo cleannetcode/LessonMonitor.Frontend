@@ -1,14 +1,14 @@
 let tasks = [
-    { task: "task1", isDone: false },
-    { task: "task2", isDone: false },
-    { task: "task3", isDone: false },
-    { task: "task4", isDone: false }
+    { title: "task1", isDone: false },
+    { title: "task2", isDone: false },
+    { title: "task3", isDone: false },
+    { title: "task4", isDone: false }
 ];
-let sectionTask = document.getElementById('task-section');
-let listingTask = document.getElementById('task-Listing');
+let sectionTask = document.getElementById('tasks-section');
+let listTask = document.getElementById('task-list');
 
 
-function printAddTask() {
+function printInputTask() {
     let inputTask = document.createElement('input');
     inputTask.type = "text";
     inputTask.id = "addNewTask";
@@ -26,12 +26,12 @@ function printAddTask() {
 
 function addNewTask(e) {
     let valueTask = document.getElementById('addNewTask').value;
-    let newTask = { task: valueTask, isDone: false };
+    let newTask = { title: valueTask, isDone: false };
     tasks.push(newTask);
-    listingTask.innerHTML = '';
+    listTask.innerHTML = '';
     printTasks();
 }
-printAddTask();
+printInputTask();
 
 function printTasks() {
     for (let index = 0; index < tasks.length; index++) {
@@ -43,7 +43,7 @@ function printTasks() {
         if (tasks[index].isDone == true) {
             spanTask.style.textDecoration = "line-through";
         }
-        spanTask.innerHTML = tasks[index].task;
+        spanTask.innerHTML = tasks[index].title;
         liTask.appendChild(spanTask);
 
         let buttonDone = document.createElement('button');
@@ -57,7 +57,7 @@ function printTasks() {
         buttonDelete.id = index;
         buttonDelete.onclick = deleteTask;
         liTask.appendChild(buttonDelete);
-        listingTask.appendChild(liTask);
+        listTask.appendChild(liTask);
     }
 }
 printTasks();
@@ -77,6 +77,6 @@ function deleteTask(e) {
     let id = e.target.id;
     let liter = document.getElementsByClassName('task-border')[id];
     tasks.splice(liter.id, 1);
-    listingTask.innerHTML = '';
+    listTask.innerHTML = '';
     printTasks();
 }
