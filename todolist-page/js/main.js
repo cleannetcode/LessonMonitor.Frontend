@@ -1,4 +1,3 @@
-// массив для хранения задач
 let tasks = [
     { id:'', name: 'task 1', isDone: false },
     { id:'', name: 'task 2', isDone: true },
@@ -6,18 +5,17 @@ let tasks = [
     { id:'', name: 'task 4', isDone: false }
 ];
 
-//Список в который добавляются задачи
 let rootTaskElement = document.getElementById('tasks');
 
 //Начальная инициализация массива и отрисовка
 for (let i = 0; i < tasks.length; i++) {
     let task = tasks[i];
-    task.id = CreateUniqueId();
-    AddTaskElement(task)
+    task.id = createUniqueId();
+    addTaskElement(task)
 }
 
 // Добавление нового задания в массив и отрисовка его на экране.
-function AddNewTask()
+function addNewTask()
 {
     let input = document.getElementById("newTaskName");
     let newTaskName = input.value;
@@ -34,16 +32,16 @@ function AddNewTask()
     input.value = "";
 
     let newTask = { 
-        id: CreateUniqueId(), 
+        id: createUniqueId(), 
         name: newTaskName, 
         isDone: false 
     };
-    AddTaskElement(newTask);
+    addTaskElement(newTask);
     tasks.push(newTask);
 }
 
 // добавляет задачу в массив и отрисовывает в список
-function AddTaskElement(task)
+function addTaskElement(task)
 {
     let newTask = document.createElement('li');
     newTask.id = task.id;
@@ -68,7 +66,6 @@ function AddTaskElement(task)
     rootTaskElement.append(newTask);
 }
 
-// Удаляет задачу
 function deleteTask(task) {
     //Удалить из массива tasks
     let elementIndex = tasks.indexOf(task,0);
@@ -79,20 +76,17 @@ function deleteTask(task) {
     htmlElement.remove();
 }
 
-// Меняет статус задачи с выполнено на невыполнено и наоборот
 function toggleTaskIsDone(task) {
     let taskName = document.querySelector(`#${task.id} > span`);
     task.isDone = !task.isDone;
     taskName.classList.toggle("taskDone");
 }
 
-//Создать уникальный идентификатор
-function CreateUniqueId()
+function createUniqueId()
 {
     return "task-" + Math.random().toString(16).slice(2);
 }
 
-//Проверка что строка пустая и не содержит пробелов.
 function isEmptyString(str) {
     return (str.length === 0 || !str.trim());
 };
