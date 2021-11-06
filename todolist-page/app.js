@@ -23,7 +23,7 @@ const taskService = {
     },
 
     Remove: function(taskId){
-        var findTasks = tasks.filter(x=>x.id == taskId);
+        let findTasks = this.tasks.filter(x=>x.id == taskId);
 
         if (findTasks.length > 0)
         {
@@ -36,7 +36,7 @@ const taskService = {
     },
 
     SetStatus: function(taskId, taskStatus){
-        var findTasks = this.tasks.filter(x=>x.id == taskId);
+        let findTasks = this.tasks.filter(x=>x.id == taskId);
 
         if (findTasks.length > 0)
         {
@@ -62,7 +62,6 @@ addNewTaskButton.onclick = function(e){
     });
 }
 
-
 function renderList(tasks){
     
     ul.innerHTML = '';
@@ -74,7 +73,7 @@ function renderList(tasks){
 
 function renderListItem(ul, task){
     
-    var checkbox = getCheckBoxElement(task);
+    let checkbox = getCheckBoxElement(task);
     
     let itemTextContainer = document.createElement('span');
     itemTextContainer.innerText = task.text;
