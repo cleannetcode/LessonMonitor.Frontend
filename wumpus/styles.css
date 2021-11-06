@@ -1,0 +1,246 @@
+html,
+body {
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+app {
+    position: relative;
+    
+}
+
+app[data-game-state="2"] #gameOver {
+    display: flex;
+}
+
+#gameOver {
+    display: none;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background: rgb(0 0 0 / 80%);
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    z-index: 40;
+}
+
+#gameOver > .message {
+    font-size: 22px;
+    padding-bottom: 20px;
+}
+
+#gameOver > .message.success {
+    color: #53e7a2;
+}
+
+#gameOver > .message.fail {
+    color: #e75353;
+}
+
+#gameOver > button {
+    background: #111;
+    border: 0;
+    content: 'again';
+    color: #fff;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+#gameOver > button:hover {
+    opacity: .75;
+}
+
+map {
+    display: grid;
+    background: #121212;
+    width: var(--map-w);
+    height: var(--map-h);
+    grid-template-columns: repeat(var(--map-blocks-x), 1fr);
+    grid-template-rows: repeat(var(--map-blocks-y), 1fr);
+    box-shadow: 0px 0px 20px 0px #080808;
+    padding: 15px;
+    z-index: 10;
+}
+
+map::before{
+    display: block;
+    content: '';
+    background: url('images/bg.jpg') center center no-repeat;
+    background-size:cover;
+    width: var(--map-w);
+    height: var(--map-h);
+    position: absolute;
+    opacity: .15;
+}
+
+app:not([data-debug="true"]) .unit:not(.unit__player) {
+    display: none;
+}
+
+app[data-game-state="2"] .unit:not(.unit__player) {
+    display: initial;
+}
+
+log {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: .3;
+    color: #fff;
+    z-index: 20;
+    cursor: default;
+    padding: 15px;
+    text-transform: lowercase;
+    max-height: 20%;
+    overflow: hidden;
+}
+
+log::after {
+    position: absolute;
+    bottom: 0;  
+    left: 0;
+    height: 100%;
+    width: 100%;
+    content: "";
+    background: linear-gradient(to top,
+       rgba(20,20,20, 1) 20%, 
+       rgba(255,255,255, 0) 80%
+    );
+    pointer-events: none; /* so the text is still selectable */
+    
+    
+}
+
+.unit__wumpus {
+    background: url('images/wumpus.png');
+    background-size: cover;
+}
+
+.unit__player {
+    background: url('images/player.png');
+    background-size: cover;
+}
+
+.unit__bat {
+    background: url('images/bat.png');
+    background-size: cover;
+}
+
+.unit__hole {
+    background: url('images/hole.png');
+    background-size: cover;
+    opacity: .2;
+}
+
+controls {
+    padding: 10px;
+    display: none;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    justify-content: center;
+    z-index: 30;
+    grid-template-columns: auto auto auto 1fr auto auto auto;
+    grid-template-rows: auto auto;
+    grid-template-areas:". goUp . . . shotUp ."
+                        "goLeft goDown goRight . shotLeft shotDown shotRight";
+}
+
+controls::before, controls::after {
+    position: absolute;
+    bottom: -1.5em;
+    text-transform: lowercase;
+    font-size: .8em;
+    color: #242424;
+}
+
+controls::before {
+    content: 'Перемещение';
+    left: 0;
+    padding-left: 1em;
+}
+
+controls::after {
+    content: 'Стрельба из лука';
+    right: 0;
+    padding-right: 1em;
+}
+
+.trackpad__control-left {
+    grid-area: goLeft;
+}
+
+.trackpad__control-right {
+    grid-area: goRight;
+}
+
+.trackpad__control-up {
+    grid-area: goUp;
+}
+
+.trackpad__control-down {
+    grid-area: goDown;
+}
+
+.shootpad__control-left {
+    grid-area: shotLeft;
+}
+
+.shootpad__control-right {
+    grid-area: shotRight;
+}
+
+.shootpad__control-up {
+    grid-area: shotUp;
+}
+
+.shootpad__control-down {
+    grid-area: shotDown;
+}
+
+app[data-game-state="1"]:hover controls {
+    display: grid;
+}
+
+.trackpad__control, .shootpad__control {
+    width: 30px;
+    height: 30px;
+    border: 0;
+    cursor: pointer;
+    opacity: .3;
+    color: #fff;
+    background: #242424;
+    border-radius: 50%;
+    margin: 4px;
+}
+
+.shootpad__control:hover, .trackpad__control:hover {
+    background: #747474;
+}
+
+.shootpad__control-left::before, .trackpad__control-left::before {
+    content: '←';
+}
+
+.shootpad__control-right::before, .trackpad__control-right::before {
+    content: '→';
+}
+
+.shootpad__control-up::before, .trackpad__control-up::before {
+    content: '↑';
+}
+
+.shootpad__control-down::before, .trackpad__control-down::before {
+    content: '↓';
+}
+
