@@ -1,22 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo list app</title>
 
-<head>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Todo list app</title>
-	<script src="todolist.js" defer></script>
-</head>
+    <link rel="stylesheet" href="style.css" />
+    <script src="todolist.js" defer></script>
+  </head>
 
-<body>
-	<h1>Todo list app</h1>
-	<div>
-		<input id="issue-name" type="text" placeholder="issue name">
-		<button id="add-new-issue" onclick="app.createNewIssue()">Add</button>
-	</div>
-	<ul id="issues">
-	</ul>
-</body>
+  <body>
+    <section class="todo">
+      <div class="container">
+        <h3 class="title">Список заметок</h3>
+        <ul class="todo__list">
+          <!-- Render from JS -->
+        </ul>
 
+        <form id="form">
+          <h3 class="title form-title">Что необходимо сделать?</h3>
+          <label>
+            <input type="text" class="task__fields task__input" placeholder="Наименование задачи" />
+          </label>
+          <button type="submit" class="task__add">Добавить задачу</button>
+        </form>
+      </div>
+    </section>
+  </body>
 </html>

@@ -1,87 +1,116 @@
 'use strict';
 
-function Application() {
-	const issues = [
-		new Issue('item 1'),
-		new Issue('item 2'),
-		new Issue('item 3'),
-		new Issue('item 4')
-	];
+class Issue {
+	constructor(issueDescription) {
+		this.id = `id${Math.round(Math.random() * 1e8).toString(16)}`;
+		this.description = issueDescription;
+		this.isDone = false;
+	}
+}
 
-	this.start = function () {
-		this.printIssues();
+class Application {
+	constructor({
+		todoList,
+		taskInput,
+		form
+	}) {
+		if (!todoList || !taskInput || !form) {
+			console.warn('Todo: необходимо 3 свойства, "todoList", "taskInput" и "form"!');
+		}
+
+		this.todoList = document.querySelector(todoList);
+		this.taskInput = document.querySelector(taskInput);
+		this.form = document.querySelector(form);
+		this.issues = JSON.parse(localStorage.getItem('todoList')) || [];
 	}
 
-	this.printIssues = function () {
-		let issuesElement = document.getElementById('issues');
-		issuesElement.innerHTML = null;
+	renderTodoList(task) {
+		const listItem = document.createElement('li');
 
-		for (let index = 0; index < issues.length; index++) {
-			const issue = issues[index];
+		if (task.isDone) {
+			listItem.classList.add('todo__item', 'todo__item-done');
+			listItem.innerHTML = `<span class="todo-item-text text-done">${task.description}</span>
+			<div class="buttons">
+				<button class="todo_done visible" data-id="${task.id}">Сделано</button>
+				<button class="todo_delete" data-id="${task.id}">x</button>
+			</div>`;
 
-			const issueId = composeIssueId(index);
-			if (document.getElementById(issueId)) {
-				continue;
-			}
+		} else {
+			listItem.classList.add('todo__item');
+			listItem.innerHTML = `<span class="todo-item-text">${task.description}</span>
+			<div class="buttons">
+				<button class="todo_done" data-id="${task.id}">Сделано</button>
+				<button class="todo_delete" data-id="${task.id}">x</button>
+			</div>`;
+		}
 
-			let issueElement = document.createElement('li');
-			issueElement.id = issueId;
+		this.todoList.append(listItem);
+	};
 
-			let issueNameElement = document.createElement('span');
-			issueNameElement.innerText = issue.name;
-			issueNameElement.style.textDecoration = issue.isDone ? 'line-through' : null;
+	addTask(event) {
+		event.preventDefault();
+		const taskInputValue = this.taskInput.value;
 
-			let toggleDoneButton = document.createElement('button');
-			toggleDoneButton.onclick = (e) => this.toggleDone(index);
-			toggleDoneButton.innerText = 'Done';
+		if (taskInputValue) {
+			const issue = new Issue(taskInputValue);
+			this.issues.push(issue);
+			this.init();
+		} else {
+			this.invalidTaskInput();
+		}
 
-			let deleteIssueButton = document.createElement('button');
-			deleteIssueButton.onclick = (e) => this.deleteIssue(index);
-			deleteIssueButton.innerText = 'Delete';
+		this.taskInput.value = '';
+	};
 
-			issueElement.append(issueNameElement);
-			issueElement.append(toggleDoneButton);
-			issueElement.append(deleteIssueButton);
+	invalidTaskInput() {
+		this.taskInput.classList.add('invalid');
 
-			issuesElement.append(issueElement);
+		setTimeout(() => {
+			this.taskInput.classList.remove('invalid');
+		}, 1000);
+	}
+
+	deleteTask(event) {
+		const target = event.target;
+
+		if (target.classList.contains('todo_delete')) {
+			this.issues = this.issues
+				.filter(note => note.id !== target.dataset.id);
+			this.init();
 		}
 	};
 
-	const issueName = document.getElementById('issue-name');
+	toggleDone(event) {
+		const target = event.target;
 
-	this.createNewIssue = function () {
-		const issue = new Issue(issueName.value);
-		issues.push(issue);
-		this.printIssues();
+		if (target.classList.contains('todo_done')) {
+			this.issues.forEach(task => {
+				if (task.id == target.dataset.id) {
+					task.isDone = !task.isDone;
+					this.init();
+				}
+			});
+		}
 	}
 
-	this.deleteIssue = function (index) {
-		issues.splice(index, 1);
-		this.printIssues();
-	}
+	init() {
+		this.todoList.textContent = '';
+		this.issues.forEach(task => this.renderTodoList(task));
+		localStorage.setItem('todoList', JSON.stringify(this.issues));
+	};
 
-	this.toggleDone = function (index) {
-		issues[index].toggleDone();
-		this.printIssues();
-	}
-
-	function composeIssueId(issueId) {
-		return `issue-${issueId}`;
-	}
-}
-
-function Issue(name) {
-	this.name = name;
-	this.isDone = false;
-	this.toggleDone = function () {
-		this.isDone = !this.isDone;
+	eventListeners() {
+		this.form.addEventListener('submit', this.addTask.bind(this));
+		this.todoList.addEventListener('click', this.deleteTask.bind(this));
+		this.todoList.addEventListener('click', this.toggleDone.bind(this));
 	}
 }
 
-function Task(name, description) {
-	Issue.call(this, name);
-	this.description = description;
-}
+const app = new Application({
+	todoList: '.todo__list',
+	taskInput: '.task__input',
+	form: '#form'
+});
 
-const app = new Application();
-app.start();
+app.eventListeners();
+app.init();
