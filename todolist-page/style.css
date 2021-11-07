@@ -89,7 +89,7 @@ body {
   display: flex;
 }
 
-.task__fields {
+.issue__fields {
   display: block;
   border: 1px solid #ccc;
   border-radius: 10px;
@@ -100,11 +100,11 @@ body {
   outline: transparent;
 }
 
-.task__fields:focus {
+.issue__fields:focus {
   border: 1px solid rgb(104 32 123);
 }
 
-.task__add {
+.issue__add {
   background-color: rgb(104 32 123);
   border-width: 2px;
   border-style: solid;
@@ -119,7 +119,7 @@ body {
   cursor: pointer;
 }
 
-.task__add:hover {
+.issue__add:hover {
   background-color: white;
   color: rgb(104 32 123);
 }

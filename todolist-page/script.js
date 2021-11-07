@@ -11,66 +11,66 @@ class Issue {
 class Application {
 	constructor({
 		todoList,
-		taskInput,
+		issueInput,
 		form
 	}) {
-		if (!todoList || !taskInput || !form) {
-			console.warn('Todo: необходимо 3 свойства, "todoList", "taskInput" и "form"!');
+		if (!todoList || !issueInput || !form) {
+			console.warn('Todo: необходимо 3 свойства, "todoList", "issueInput" и "form"!');
 		}
 
 		this.todoList = document.querySelector(todoList);
-		this.taskInput = document.querySelector(taskInput);
+		this.issueInput = document.querySelector(issueInput);
 		this.form = document.querySelector(form);
 		this.issues = JSON.parse(localStorage.getItem('todoList')) || [];
 	}
 
-	renderTodoList(task) {
+	renderTodoList(issue) {
 		const listItem = document.createElement('li');
 
-		if (task.isDone) {
+		if (issue.isDone) {
 			listItem.classList.add('todo__item', 'todo__item-done');
-			listItem.innerHTML = `<span class="todo-item-text text-done">${task.description}</span>
+			listItem.innerHTML = `<span class="todo-item-text text-done">${issue.description}</span>
 			<div class="buttons">
-				<button class="todo_done visible" data-id="${task.id}">Сделано</button>
-				<button class="todo_delete" data-id="${task.id}">x</button>
+				<button class="todo_done visible" data-id="${issue.id}">Сделано</button>
+				<button class="todo_delete" data-id="${issue.id}">x</button>
 			</div>`;
 
 		} else {
 			listItem.classList.add('todo__item');
-			listItem.innerHTML = `<span class="todo-item-text">${task.description}</span>
+			listItem.innerHTML = `<span class="todo-item-text">${issue.description}</span>
 			<div class="buttons">
-				<button class="todo_done" data-id="${task.id}">Сделано</button>
-				<button class="todo_delete" data-id="${task.id}">x</button>
+				<button class="todo_done" data-id="${issue.id}">Сделано</button>
+				<button class="todo_delete" data-id="${issue.id}">x</button>
 			</div>`;
 		}
 
 		this.todoList.append(listItem);
 	};
 
-	addTask(event) {
+	addIssue(event) {
 		event.preventDefault();
-		const taskInputValue = this.taskInput.value;
+		const issueInputValue = this.issueInput.value;
 
-		if (taskInputValue) {
-			const issue = new Issue(taskInputValue);
+		if (issueInputValue) {
+			const issue = new Issue(issueInputValue);
 			this.issues.push(issue);
 			this.init();
 		} else {
-			this.invalidTaskInput();
+			this.invalidIssueInput();
 		}
 
-		this.taskInput.value = '';
+		this.issueInput.value = '';
 	};
 
-	invalidTaskInput() {
-		this.taskInput.classList.add('invalid');
+	invalidIssueInput() {
+		this.issueInput.classList.add('invalid');
 
 		setTimeout(() => {
-			this.taskInput.classList.remove('invalid');
+			this.issueInput.classList.remove('invalid');
 		}, 1000);
 	}
 
-	deleteTask(event) {
+	deleteIssue(event) {
 		const target = event.target;
 
 		if (target.classList.contains('todo_delete')) {
@@ -84,9 +84,9 @@ class Application {
 		const target = event.target;
 
 		if (target.classList.contains('todo_done')) {
-			this.issues.forEach(task => {
-				if (task.id == target.dataset.id) {
-					task.isDone = !task.isDone;
+			this.issues.forEach(issue => {
+				if (issue.id == target.dataset.id) {
+					issue.isDone = !issue.isDone;
 					this.init();
 				}
 			});
@@ -95,20 +95,20 @@ class Application {
 
 	init() {
 		this.todoList.textContent = '';
-		this.issues.forEach(task => this.renderTodoList(task));
+		this.issues.forEach(issue => this.renderTodoList(issue));
 		localStorage.setItem('todoList', JSON.stringify(this.issues));
 	};
 
 	eventListeners() {
-		this.form.addEventListener('submit', this.addTask.bind(this));
-		this.todoList.addEventListener('click', this.deleteTask.bind(this));
+		this.form.addEventListener('submit', this.addIssue.bind(this));
+		this.todoList.addEventListener('click', this.deleteIssue.bind(this));
 		this.todoList.addEventListener('click', this.toggleDone.bind(this));
 	}
 }
 
 const app = new Application({
 	todoList: '.todo__list',
-	taskInput: '.task__input',
+	issueInput: '.issue__input',
 	form: '#form'
 });
 
