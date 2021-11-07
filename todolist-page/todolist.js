@@ -1,25 +1,27 @@
 'use strict';
 
-function Application() {
-	const issues = [
+class Application {
+	#issues = [
 		new Issue('item 1'),
 		new Issue('item 2'),
 		new Issue('item 3'),
 		new Issue('item 4')
 	];
 
-	this.start = function () {
-		this.printIssues();
-	}
+	#issueName = document.getElementById('issue-name');
 
-	this.printIssues = function () {
+	start() {
+		this.printIssues();
+	};
+
+	printIssues() {
 		let issuesElement = document.getElementById('issues');
 		issuesElement.innerHTML = null;
 
-		for (let index = 0; index < issues.length; index++) {
-			const issue = issues[index];
+		for (let index = 0; index < this.#issues.length; index++) {
+			const issue = this.#issues[index];
 
-			const issueId = composeIssueId(index);
+			const issueId = this.#composeIssueId(index);
 			if (document.getElementById(issueId)) {
 				continue;
 			}
@@ -47,40 +49,39 @@ function Application() {
 		}
 	};
 
-	const issueName = document.getElementById('issue-name');
-
-	this.createNewIssue = function () {
-		const issue = new Issue(issueName.value);
-		issues.push(issue);
+	createNewIssue() {
+		const issue = new Issue(this.#issueName.value);
+		this.#issues.push(issue);
 		this.printIssues();
-	}
+	};
 
-	this.deleteIssue = function (index) {
-		issues.splice(index, 1);
+	deleteIssue(index) {
+		this.#issues.splice(index, 1);
 		this.printIssues();
-	}
+	};
 
-	this.toggleDone = function (index) {
-		issues[index].toggleDone();
+	toggleDone(index) {
+		this.#issues[index].toggleDone();
 		this.printIssues();
-	}
+	};
 
-	function composeIssueId(issueId) {
+	#composeIssueId(issueId) {
 		return `issue-${issueId}`;
 	}
 }
 
-function Issue(name) {
-	this.name = name;
-	this.isDone = false;
-	this.toggleDone = function () {
-		this.isDone = !this.isDone;
+class Issue {
+	constructor(name) {
+		this.name = name;
+		this.isDone = false;
 	}
-}
 
-function Task(name, description) {
-	Issue.call(this, name);
-	this.description = description;
+	name = '';
+	isDone = false;
+
+	toggleDone() {
+		this.isDone = !this.isDone;
+	};
 }
 
 const app = new Application();
