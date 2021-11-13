@@ -1,69 +1,65 @@
-function Application(){
-    const tasks = [
-        new Task('task 1',false),
-        new Task('task 2',true),
-        new Task('task 3',false),
-        new Task('task 4',false)
-    ];
-
-    let $this = this;
-    let htmlWorker = new HtmlWorker();
-
-    this.start = function(){
-        htmlWorker.initTasks(tasks, this.deleteTask, this.toggleTaskIsDone);
-        htmlWorker.initNewTaskButton(this.addNewTask);
+class Application {
+    constructor(
+        createdTasks
+    ){
+        this.tasks = createdTasks;
+        this.$this = this;
+        this.htmlWorker = new HtmlWorker();
     }
 
-    this.addNewTask = function()
-    {
-        let newTaskName = htmlWorker.getNewTaskName();
+    start() { 
+        this.htmlWorker.initTasks(tasks, this.deleteTask, this.toggleTaskIsDone);
+        this.htmlWorker.initNewTaskButton(this.addNewTask);
+    }
 
-        if (isEmptyString(newTaskName))
+    // ----> ПРОВЕРЯТЬ ТУТ <-----
+    addNewTask(e) {
+        let newTaskName = app.htmlWorker.getNewTaskNameAndClearInput();
+
+        if (app.isEmptyString(newTaskName))
         {
-            htmlWorker.showError();
+            this.htmlWorker.showError();
             return;
         }
 
         let newTask = new Task(newTaskName,false);
         tasks.push(newTask);
 
-        htmlWorker.addNewTask(newTask, $this.deleteTask, $this.toggleTaskIsDone);
+        app.htmlWorker.addNewTask(newTask, app.deleteTask, app.toggleTaskIsDone);
     }
     
-    this.deleteTask = function(task) {
+    deleteTask(task) {
         let elementIndex = tasks.indexOf(task,0);
         tasks.splice(elementIndex,1);
     }
 
-    this.toggleTaskIsDone = function(task) {
+    toggleTaskIsDone(task) {
         task.isDone = !task.isDone;
     }
 
-    function isEmptyString(str) {
+    isEmptyString(str) {
         return (str.length === 0 || !str.trim());
     };
 }
 
-function HtmlWorker(){
-    let $this = this;
-    let input = document.getElementById("newTaskName");
+class HtmlWorker{
+    constructor() {
+        this.input = document.getElementById("newTaskName");
+    }
 
-    this.initNewTaskButton = function(addNewTaskFunction)
-    {
+    initNewTaskButton(addNewTaskFunction) {
         let btnNewTask = document.getElementById('btnNewTask');
         btnNewTask.addEventListener("click", addNewTaskFunction);
     }
 
-    this.showError = function()
-    {
-        input.classList.add('error');
+    showError() {
+        this.input.classList.add('error');
         setTimeout(function() {
             input.classList.remove('error');
         }, 2000)
     }
 
-    this.addNewTask = function(task, appDeleteTask, appToggleTaskIsDone)
-    {
+    addNewTask (task, appDeleteTask, appToggleTaskIsDone) {
         let newTask = document.createElement('li');
         newTask.id = task.id;
 
@@ -73,7 +69,7 @@ function HtmlWorker(){
             newTaskName.classList.add("taskDone");
 
         let taskDoneButton = document.createElement('button');
-        
+        let $this = this;
         taskDoneButton.addEventListener("click", function(){
             appToggleTaskIsDone(task)
             $this.toggleTaskIsDone(task);
@@ -98,39 +94,56 @@ function HtmlWorker(){
         rootTaskElement.append(newTask);
     }
 
-    this.initTasks = function(tasks, appDeleteTask, appToggleTaskIsDone ){
+    initTasks (tasks, appDeleteTask, appToggleTaskIsDone ) {
         for (let i = 0; i < tasks.length; i++) {
             this.addNewTask(tasks[i], appDeleteTask, appToggleTaskIsDone)
         }
     };
 
-    this.getNewTaskName = function(){
-        let newTaskName = input.value;
-        input.value = "";
+    getNewTaskNameAndClearInput = function() {
+        let newTaskName = this.input.value;
+        this.input.value = "";
         return newTaskName;
     }
 
-    this.toggleTaskIsDone = function(task) {
+    toggleTaskIsDone = function(task) {
         let taskName = document.querySelector(`#${task.id} > span`);
         taskName.classList.toggle("taskDone");
     }
 
-    this.deleteTask = function(task) {
+    deleteTask = function(task) {
         let htmlElement = document.getElementById(task.id);
         htmlElement.remove();
     }
 }
 
-function Task(name, isDone) {
-    this.name = name;
-    this.isDone = isDone;
-    this.id = createUniqueId();
-
-    function createUniqueId()
+class Task {
+    constructor(
+        name, 
+        isDone
+    )
+    {
+        this.name = name;
+        this.isDone = isDone;
+        this.id = this.createUniqueId();
+    }
+    
+    createUniqueId()
     {
         return "task-" + Math.random().toString(16).slice(2);
     };
 }
 
-let app = new Application();
+let tasks = [
+        new Task('task 1',false),
+        new Task('task 2',true),
+        new Task('task 3',false),
+        new Task('task 4',false)
+    ];
+
+var app = new Application(tasks);
+
+console.log(window.app)
 app.start();
+
+
