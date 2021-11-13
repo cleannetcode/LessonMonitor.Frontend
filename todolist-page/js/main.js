@@ -12,13 +12,12 @@ class Application {
         this.htmlWorker.initNewTaskButton(this.addNewTask);
     }
 
-    // ----> ПРОВЕРЯТЬ ТУТ <-----
     addNewTask(e) {
         let newTaskName = app.htmlWorker.getNewTaskNameAndClearInput();
 
         if (app.isEmptyString(newTaskName))
         {
-            this.htmlWorker.showError();
+            app.htmlWorker.showError();
             return;
         }
 
