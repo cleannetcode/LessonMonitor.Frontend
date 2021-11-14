@@ -10,7 +10,7 @@ class Application {
 
     start() { 
         this.htmlWorker.initTasks(tasks, this.deleteTask, this.toggleTaskIsDone);
-        this.htmlWorker.initNewTaskButton(this.addNewTask.bind(this));
+        this.htmlWorker.initNewTaskButton(() => {this.addNewTask()});
     }
 
     addNewTask(e) {
@@ -54,9 +54,9 @@ class HtmlWorker{
 
     showError() {
         this.input.classList.add('error');
-        setTimeout( function() {
+        setTimeout( () => {
             this.input.classList.remove('error');
-        }.bind(this), 2000)
+        }, 2000)
     }
 
     addNewTask (task, appDeleteTask, appToggleTaskIsDone) {
@@ -69,19 +69,19 @@ class HtmlWorker{
             newTaskName.classList.add("taskDone");
 
         let taskDoneButton = document.createElement('button');
-        taskDoneButton.addEventListener("click", function(){
+        taskDoneButton.addEventListener("click", () => {
             appToggleTaskIsDone(task)
             this.toggleTaskIsDone(task);
-        }.bind(this));
+        });
 
         taskDoneButton.innerText = 'Done';
 
         let taskDeleteButton = document.createElement('button');
 
-        taskDeleteButton.addEventListener("click", function(){
+        taskDeleteButton.addEventListener("click", () => {
             appDeleteTask(task); 
             this.deleteTask(task);
-        }.bind(this));
+        });
 
         taskDeleteButton.innerText = 'Delete';
 
