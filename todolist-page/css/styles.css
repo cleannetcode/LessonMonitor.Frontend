@@ -1,0 +1,101 @@
+/*=============== Шрифты ===============*/
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap");
+
+:root {
+    --font-size: 14px;
+    --text-color: #000000;
+    --body-color: #ffffff;
+    --button-bg-color: #198754;
+    --button-bg-hover-color: #157347;
+    --button-color: #ffffff;
+    --border-radius: 5px;
+}    
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    margin: 0;
+    font-size: var(--font-size);
+    background-color: var(--body-color);
+    color: var(--text-color);
+}
+
+.container {
+    display: block;
+    width: 400px;
+    margin: 0 auto;
+}
+
+.logo {
+    text-align: center;
+}
+
+.new-task {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.btn-add {
+    background: var(--button-bg-color);
+    color: var(--button-color);
+    text-align: center;
+    padding: 5px 10px;
+    border-radius: var(--border-radius);
+    border: 0px;
+    cursor: pointer;
+
+    white-space: nowrap;
+}
+
+.btn-add:hover {
+    background-color: var(--button-bg-hover-color);
+}
+
+.new-task-input-text {
+    padding: 0;
+    width: 100%;
+    border: 1px solid #ced4da;
+    border-radius: var(--border-radius);
+    margin: 0 5px;
+    padding: 0 5px;
+    outline: none;
+    transition: box-shadow 0.5s;
+}
+
+.new-task-input-text:focus {
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 5px rgb(13 110 253 / 25%);
+}
+
+.new-task-input-text.error {
+    box-shadow: 0 0 0 5px #fe8686;
+    transition: box-shadow 2s;
+}
+
+.task-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.task-list li {
+    padding: 12px;
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.task-list li:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.task-list li span {
+    display: block;
+    width: 100%;   
+}
+
+.taskDone {
+    text-decoration: line-through;
+}
+
+
+
+  

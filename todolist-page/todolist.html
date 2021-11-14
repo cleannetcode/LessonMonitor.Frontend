@@ -1,42 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="ru">
 <head>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Todo list app</title>
-	<script src="todolist.js" defer></script>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="css/styles.css">
+  <title>ToDo list APP </title>
 </head>
-
 <body>
-	<h1>Todo list app</h1>
-	<div>
-		<input id="issue-name" type="text" placeholder="issue name">
-		<button id="add-new-issue" onclick="createNewIssue()">Add</button>
-	</div>
-	<ul id="issues">
-		<!-- <li>
-			<span>item 1</span>
-			<button>Done</button>
-			<button onclick="deleteIssue(this)">Delete</button>
-		</li>
-		<li>
-			<span>item 2</span>
-			<button>Done</button>
-			<button onclick="deleteIssue(this)">Delete</button>
-		</li>
-		<li>
-			<span>item 3</span>
-			<button>Done</button>
-			<button onclick="deleteIssue(this)">Delete</button>
-		</li>
-		<li>
-			<span>item 4</span>
-			<button>Done</button>
-			<button onclick="deleteIssue(this)">Delete</button>
-		</li> -->
-	</ul>
+  <div class="container">
+    <h1 class="logo">TODO list app</h1>
+    <div class="new-task">
+      <input id="newTaskName" class="new-task-input-text" type="text" placeholder="новая задача">
+      <button id="btnNewTask" class="btn-add">Добавить задачу</button>
+    </div>
+    <ul id="tasks" class="task-list">
+    </ul>
+  </div>
+  <script src="js/main.js" ></script>
 </body>
-
 </html>
