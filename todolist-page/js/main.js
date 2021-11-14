@@ -1,31 +1,32 @@
+"use strict"
+
 class Application {
     constructor(
         createdTasks
     ){
         this.tasks = createdTasks;
-        this.$this = this;
         this.htmlWorker = new HtmlWorker();
     }
 
     start() { 
         this.htmlWorker.initTasks(tasks, this.deleteTask, this.toggleTaskIsDone);
-        this.htmlWorker.initNewTaskButton(this.addNewTask);
+        this.htmlWorker.initNewTaskButton(this.addNewTask.bind(this));
     }
 
     addNewTask(e) {
-        let newTaskName = app.htmlWorker.getNewTaskNameAndClearInput();
+        let newTaskName = this.htmlWorker.getNewTaskNameAndClearInput();
 
-        if (app.isEmptyString(newTaskName))
+        if (this.isEmptyString(newTaskName))
         {
-            app.htmlWorker.showError();
+            this.htmlWorker.showError();
             return;
         }
 
         let newTask = new Task(newTaskName,false);
         tasks.push(newTask);
 
-        app.htmlWorker.addNewTask(newTask, app.deleteTask, app.toggleTaskIsDone);
-    }
+        this.htmlWorker.addNewTask(newTask, this.deleteTask, this.toggleTaskIsDone);
+    };
     
     deleteTask(task) {
         let elementIndex = tasks.indexOf(task,0);
@@ -53,9 +54,9 @@ class HtmlWorker{
 
     showError() {
         this.input.classList.add('error');
-        setTimeout(function() {
-            app.htmlWorker.input.classList.remove('error');
-        }, 2000)
+        setTimeout( function() {
+            this.input.classList.remove('error');
+        }.bind(this), 2000)
     }
 
     addNewTask (task, appDeleteTask, appToggleTaskIsDone) {
@@ -68,11 +69,10 @@ class HtmlWorker{
             newTaskName.classList.add("taskDone");
 
         let taskDoneButton = document.createElement('button');
-        let $this = this;
         taskDoneButton.addEventListener("click", function(){
             appToggleTaskIsDone(task)
-            $this.toggleTaskIsDone(task);
-        });
+            this.toggleTaskIsDone(task);
+        }.bind(this));
 
         taskDoneButton.innerText = 'Done';
 
@@ -80,8 +80,8 @@ class HtmlWorker{
 
         taskDeleteButton.addEventListener("click", function(){
             appDeleteTask(task); 
-            $this.deleteTask(task);
-        });
+            this.deleteTask(task);
+        }.bind(this));
 
         taskDeleteButton.innerText = 'Delete';
 
@@ -141,7 +141,6 @@ let tasks = [
     ];
 
 var app = new Application(tasks);
-
 app.start();
 
 
