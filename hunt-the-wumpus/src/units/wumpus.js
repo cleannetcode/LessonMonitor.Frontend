@@ -1,11 +1,13 @@
 import EnemyUnit from "./enemyUnit.js";
+import Helper from "../helper/helper.js"
+import Animation from "../game-animations/animation.js";
 
 export default class Wumpus extends EnemyUnit {
     constructor(posX, posY) {
         super('wumpus', posX, posY);
         this.color = "#2FF"
-        this.img = "img/wumpus.png"
         this.messages = ["Strange sound!", "Stinks of something!", "Oink-oink-oink!"];
+        this._animations = [new Animation('img/unitw/0.gif', 3, this.posX, this.posY)];
     }
 
     onMove(gameInstanse) {
@@ -15,8 +17,8 @@ export default class Wumpus extends EnemyUnit {
 
         let isLocationValid = false;
 
-        while (isLocationValid == false && i < 3) {
-            let rnd = this.getRandomInt(0, 4);
+        while (isLocationValid == false && i < 20) {
+            let rnd = Helper.getRandomInt(0, 4);
             newX = this.posX;
             newY = this.posY;
             i++;
@@ -41,7 +43,6 @@ export default class Wumpus extends EnemyUnit {
             }
 
             let newLocation = gameInstanse.getGameMapLocation(newX, newY);
-
             isLocationValid = (newLocation == 1);
 
             if (isLocationValid == false) { continue; }

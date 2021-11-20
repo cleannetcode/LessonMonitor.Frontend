@@ -3,26 +3,22 @@ import FPS from '../game-objects/fps.js';
 import Log from '../game-objects/log.js';
 import SoundEffects from './soundEffects.js'
 import GameInstanse from '../game-instanse/gameInstanse.js';
+import Helper from "../helper/helper.js"
 
 export default class Game {
     constructor() {
-        this._context = document.getElementById('canvas').getContext('2d');
-        this.width = this._context.width = 610;
-        this.height = this._context.height = 370;
-
-        this._gameWindow = document.querySelector('.game-map');
+        this._canvas = document.getElementById('canvas');
+        this._canvas.width = 610;
+        this._canvas.height = 370;
+        this._context = this._canvas.getContext('2d');
+        this._imageSize = 35;
         this._btnStart = document.querySelector('.btn-start');
-        this._btnClear = document.querySelector('.btn-clear');
+        this._btnReset = document.querySelector('.btn-reset');
         this._countSteps = document.querySelector('.steps');
+        this._countkills = document.querySelector('.kills');
         this._win = document.querySelector('.game-won');
         this._lose = document.querySelector('.game-lose');
         this._shootController = document.querySelectorAll('.game-arrows');
-
-        this._couner = 0;
-        this._frames = [];
-        this._tileW = null;
-        this._tileH = null;
-        this._gameState = false;
 
         this._gameInstanse = new GameInstanse();
         this._stopwatch = new Timer('.time');
@@ -30,9 +26,16 @@ export default class Game {
         this._log = new Log();
         this._soundEf = new SoundEffects();
 
+        this._stepCouner = 0;
+        this._killCouner = 0;
+        this._frames = [];
+        this._tileW
+        this._tileH
+        this._gameState = false;
+
         this._mapTexture = {
-            0: 'img/Brick_Wall_Cracked.png',
-            1: 'img/Dirt_Road.png'
+            0: 'img/border/Brick_Wall_Cracked.png',
+            1: 'img/border/Dirt_Road.png'
         }
 
         this._arrowEnum = {
@@ -43,20 +46,7 @@ export default class Game {
         }
     }
 
-    init() {
-        this.drawGame();
-        this._log.clearLog();
-        this._log.addLogMessage('Start Game!');
-        this._stopwatch.startTimer();
-        this._gameState = true;
-        this.#toggleBtnDisable();
-        this._soundEf.playMainAudio();
-    }
-
-    drawGame() {
-        this._tileW = this._gameWindow.offsetWidth / this._gameInstanse.mapW;
-        this._tileH = this._gameWindow.offsetHeight / this._gameInstanse.mapH;
-
+    #drawMap() {
         if (this._context === null) {
             return;
         }
@@ -69,31 +59,29 @@ export default class Game {
 
                 this._context.imageSmoothingEnabled = true;
                 this._context.imageSmoothingQuality = 'high';
+
                 const image = new Image();
                 image.src = texturePath;
 
-                this._context.drawImage(image, x * this._tileW, y * this._tileH, this._tileW, this._tileH);
+                this._context.drawImage(image, x * this._gameInstanse.tileW, y * this._gameInstanse.tileH, this._gameInstanse.tileW, this._gameInstanse.tileH);
             }
         }
 
         this._fps.showFPS(this._context);
-        this.#drawUnits();
-        this._frames.push(requestAnimationFrame(() => this.drawGame()));
+        //this._frames.push(requestAnimationFrame(this.#drawMap.bind(this)));
+        requestAnimationFrame(this.#drawMap.bind(this));
     }
 
     #drawUnits() {
-        this._gameInstanse.enemies.forEach((enemy) => {
-            const image = new Image(37, 37);
-            image.src = enemy.img;
+        this._gameInstanse.player._animations.forEach(
+            (animation) => animation.draw(this._context, this._gameInstanse, this._gameInstanse.player.posX, this._gameInstanse.player.posY));
 
-            this._context.imageSmoothingEnabled = true;
-            this._context.imageSmoothingQuality = 'high';
-            this._context.drawImage(image, enemy.posX * this._tileW, enemy.posY * this._tileH, image.width, image.height,);
+        this._gameInstanse.enemies.forEach((enemy) => {
+            enemy._animations.forEach((animation) => animation.draw(this._context, this._gameInstanse, enemy.posX, enemy.posY));
         })
 
-        const image = new Image(37, 37);
-        image.src = this._gameInstanse.player.img;
-        this._context.drawImage(image, this._gameInstanse.player.posX * this._tileW, this._gameInstanse.player.posY * this._tileH, image.width, image.height);
+        //this._frames.push(requestAnimationFrame(this.#drawUnits.bind(this)));
+        requestAnimationFrame(this.#drawUnits.bind(this));
     }
 
     #checkUnitCollision() {
@@ -108,7 +96,7 @@ export default class Game {
                     this.#checkGameOver();
 
                 } else if (diffX >= -1 && diffX <= 1 && diffY >= -1 && diffY <= 1) {
-                    this._log.addLogMessage(enemy.messages[enemy.getRandomInt(0, enemy.messages.length)]);
+                    this._log.addLogMessage(enemy.messages[Helper.getRandomInt(0, enemy.messages.length)]);
                 }
             }
         });
@@ -126,9 +114,8 @@ export default class Game {
                 this._gameInstanse.player.moveTo(e.key);
                 this.#checkUnitCollision();
                 this.#checkGameOver();
-                this._countSteps.innerHTML = parseInt(++this._couner);
+                this._countSteps.innerHTML = parseInt(++this._stepCouner);
                 this._soundEf.playPlayerStep();
-
             } else {
                 this._log.addLogMessage('Auch!!');
                 this._soundEf.playBorderCollision();
@@ -155,31 +142,40 @@ export default class Game {
 
     #toggleBtnDisable() {
         this._btnStart.disabled = !this._btnStart.disabled;
-        this._btnClear.disabled = !this._btnClear.disabled;
+        this._btnReset.disabled = !this._btnReset.disabled;
 
         this._shootController.forEach((arrow) => {
             arrow.disabled = !arrow.disabled;
         });
     }
 
-    #reset() {
-        this._gameInstanse = new GameInstanse();
-        this._log.clearLog();
-        this._log.addLogMessage('Drawing removed!');
-        this._stopwatch.stopTimer();
-        this._stopwatch.resetTimer();
-        this._couner = 0;
-        this._countSteps.innerHTML = parseInt(this._couner);
-        this.#toggleBtnDisable();
-        this._context.clearRect(0, 0, this.width, this.height);
-        this._soundEf.stopMainAudio();
-        this._soundEf.stopGameOver();
-        this._soundEf.stopWin();
-        this._win.style.display = 'none';
-        this._lose.style.display = 'none';
+    #shooting(direction, wumpus) {
+        switch (direction) {
+            case 'ArrowLeft':
+                wumpus.isAlive = !(wumpus.posX == this._gameInstanse.player.posX - 1 && wumpus.posY == this._gameInstanse.player.posY);
 
-        if (this._frames.length > 0) {
-            this._frames.forEach(id => cancelAnimationFrame(id));
+                break;
+            case 'ArrowUp':
+                wumpus.isAlive = !(wumpus.posX == this._gameInstanse.player.posX && wumpus.posY == this._gameInstanse.player.posY - 1);
+                break;
+
+            case 'ArrowDown':
+                wumpus.isAlive = !(wumpus.posY == this._gameInstanse.player.posY + 1 && wumpus.posX == this._gameInstanse.player.posX);
+                break;
+
+            case 'ArrowRight':
+                wumpus.isAlive = !(wumpus.posY == this._gameInstanse.player.posY && wumpus.posX == this._gameInstanse.player.posX + 1);
+                break;
+            default:
+
+                console.warn('Direction is not recognized.');
+                break;
+        }
+
+        if (wumpus.isAlive) {
+            this._log.addLogMessage(this._gameInstanse.player.missMessages[Helper.getRandomInt(0, this._gameInstanse.player.missMessages.length)]);
+        } else {
+            this._soundEf.playSliceAudio();
         }
     }
 
@@ -191,6 +187,7 @@ export default class Game {
             this._gameState = false;
             this._stopwatch.stopTimer();
             this.#gameOver()
+            this._countkills.innerHTML = parseInt(++this._killCouner);
         }
     }
 
@@ -206,13 +203,53 @@ export default class Game {
         }
     }
 
+    #reset() {
+        this._log.clearLog();
+        this._log.addLogMessage('Reset Game!');
+        this._stopwatch.stopTimer();
+        this._stopwatch.resetTimer();
+        this._gameState = false;
+        this._stepCouner = 0;
+        this._killCouner = 0
+        this._countSteps.innerHTML = parseInt(this._stepCouner);
+        this._countkills.innerHTML = parseInt(this._killCouner);
+        this.#toggleBtnDisable();
+        this._soundEf.stopMainAudio();
+        this._soundEf.stopGameOver();
+        this._soundEf.stopWin();
+        this._win.style.display = 'none';
+        this._lose.style.display = 'none';
+        this._gameInstanse.player.isAlive = true;
+        this._gameInstanse.enemies.forEach((enemy) => { enemy.isAlive = true; })
+        this._gameInstanse.setValidLocation();
+
+        //this._frames.forEach((id) => cancelAnimationFrame(id));
+    }
+
+    #start() {
+        this._log.clearLog();
+        this._log.addLogMessage('Start Game!');
+        this._stopwatch.startTimer();
+        this._gameState = true;
+        this.#toggleBtnDisable();
+        this._soundEf.playMainAudio();
+    }
+
+    init() {
+        this.#drawMap();
+        this.#drawUnits();
+        this.eventListeners();
+    }
+
     eventListeners() {
-        this._btnStart.addEventListener('click', this.init.bind(this));
-        this._btnClear.addEventListener('click', this.#reset.bind(this));
+        this._btnStart.addEventListener('click', this.#start.bind(this));
+        this._btnReset.addEventListener('click', this.#reset.bind(this));
         document.addEventListener('keyup', (e) => this.#keyPressHandler(e));
         this._shootController.forEach((arrow) => {
             arrow.addEventListener('click', (e) => {
-                this._gameInstanse.player.shoot(e.target.dataset.rotation);
+                let wumpus = this._gameInstanse.enemies.find(x => x.name == 'wumpus');
+                this.#shooting(e.target.dataset.direction, wumpus);
+                this.#checkGameOver();
             })
         })
     }

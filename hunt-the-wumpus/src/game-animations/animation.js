@@ -1,34 +1,50 @@
-
 export default class Animation {
-    constructor(image, seconds, posX, posY) {
+    constructor(srcImage, seconds, posX, posY, rotation) {
+        this._srcImage = srcImage;
+        this._seconds = seconds ?? 0;
+        this._posX = posX ?? 0;
+        this._posY = posY ?? 0;
+        this._rotation = rotation ?? 0;
 
-        this._seconds = seconds;
-        this._rotation = null;
-        this._animationPosX = posX;
-        this._animationPosY = posY;
-        this._isAnimationStart = true;
+        this._imageSize = 37;
+        this._currenSeconds = 0;
+        this._counter = 0;
+
+        this._frames = [];
     }
 
-    drawSwordAttack(rotation) {
-        this._rotation = rotation;
+    draw(context, gameInstanse, posX, posY) {
+        context.imageSmoothingEnabled = true;
+        context.imageSmoothingQuality = 'high';
+        let update = true;
 
-        switch (this._rotation) {
-            case '225':
-                this._animationPosX -= 1;
-                break;
-            case '320':
-                this._animationPosY -= 1;
-                break;
-            case '135':
-                this._animationPosX += 1;
-                break;
-            case '45':
-                this._animationPosY += 1;
-                break;
+        const image = new Image(this._imageSize, this._imageSize);
+        image.src = this._srcImage;
+        image.onload = () => { update = true; };
 
-            default:
-                console.warn('Rotation is not recognized.');
-                break;
+        let dateNowSeconds = Math.floor(Date.now() / 110);
+
+        if (dateNowSeconds != this._currenSeconds) {
+            this._currenSeconds = dateNowSeconds;
+
+            this._srcImage = this._srcImage.substr(0, 10) + this._counter + this._srcImage.substr(11);
+            this._counter++
         }
+
+        if (this._counter == 10) {
+            this._counter = 0;
+        }
+
+        // утечка памяти. (необходимо исправить)
+        function renderFunction() {
+            if (update) {
+                update = false;
+
+                context.drawImage(image, posX * gameInstanse.tileW, posY * gameInstanse.tileH, image.width, image.height);
+            }
+            requestAnimationFrame(renderFunction);
+        }
+
+        requestAnimationFrame(renderFunction);
     }
 }

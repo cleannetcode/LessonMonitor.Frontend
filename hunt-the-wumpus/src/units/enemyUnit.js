@@ -2,8 +2,8 @@ import BaseUnit from "./baseUnit.js";
 import Log from "../game-objects/log.js";
 
 export default class EnemyUnit extends BaseUnit {
-    constructor(posX, posY) {
-        super(posX, posY);
+    constructor(name, posX, posY) {
+        super(name, posX, posY);
 
         this.log = new Log();
     }

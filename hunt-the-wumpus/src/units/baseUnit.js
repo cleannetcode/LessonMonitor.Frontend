@@ -1,12 +1,13 @@
 export default class BaseUnit {
     constructor(name, posX, posY) {
         this.name = name ?? 'unit';
-        this.posX = posX ?? this.getRandomInt(3, 20);
-        this.posY = posY ?? this.getRandomInt(3, 10);
+        this.posX = posX ?? 0;
+        this.posY = posY ?? 0;
         this.color = "#FFFFFF";
         this.img = null;
         this.isAlive = true;
         this.messages = [];
+        this._animations = [];
     }
 
     moveTo(direction) {
@@ -30,9 +31,5 @@ export default class BaseUnit {
                 console.warn('Direction is not recognized.');
                 break;
         }
-    }
-
-    getRandomInt(min, max) {
-        return Math.floor(Math.random() * (max - min) + min);
     }
 }

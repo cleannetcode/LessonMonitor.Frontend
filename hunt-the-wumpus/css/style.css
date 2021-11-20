@@ -111,9 +111,26 @@ body {
   cursor: pointer;
 }
 
+.btn-start {
+  background-color: #442424;
+  animation-name: blinker;
+  animation-iteration-count: infinite;
+  animation-duration: 1.5s;
+}
+
+@keyframes blinker {
+  from {
+    opacity: 0.2;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 .btn[disabled] {
   color: #3a1b17;
   background-color: #632a23;
+  animation-name: none;
 }
 
 .game-section__right {
@@ -190,7 +207,7 @@ body {
 }
 
 .game-arrows:hover {
-  background-color: #c760607a;
+  background-color: #9e4d4d7a;
 }
 
 .game-arrows[disabled] {
@@ -199,7 +216,9 @@ body {
 }
 
 button:hover:enabled {
+  background-color: #552424;
   color: #eb4c4c;
+  text-shadow: 2px 2px 0px rgba(0, 0, 0, 1);
 }
 
 .arrow {
@@ -290,3 +309,22 @@ button:hover:enabled {
       0 0 80px #c50f0f, 0 0 94px #c50f0f, 0 0 140px #c50f0f;
   }
 }
+
+/* .modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: rgb(25 18 18 / 0%) url('http://i.stack.imgur.com/FhHRx.gif') 50% 50% no-repeat;
+}
+
+body.loading .modal {
+  overflow: hidden;
+}
+
+body.loading .modal {
+  display: block;
+} */

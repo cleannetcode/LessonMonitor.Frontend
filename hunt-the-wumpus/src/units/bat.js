@@ -1,12 +1,14 @@
+import Animation from "../game-animations/animation.js";
 import SoundEffects from "../game-objects/soundEffects.js";
 import EnemyUnit from "./enemyUnit.js";
+import Helper from "../helper/helper.js"
 
 export default class Bat extends EnemyUnit {
     constructor(posX, posY) {
         super('bat', posX, posY);
         this.color = "#2134DF"
-        this.img = "img/bat.png"
         this.messages = ["I'm BatMan!", "I hear the flapping of wings!"];
+        this._animations = [new Animation('img/unitb/0.gif', 3, this.posX, this.posY)];
 
         this._soundEf = new SoundEffects();
     }
@@ -18,23 +20,18 @@ export default class Bat extends EnemyUnit {
         let isLocationValid = false;
 
         while (isLocationValid == false) {
-            newX = this.getRandomInt(0, gameInstanse.mapW);
-            newY = this.getRandomInt(0, gameInstanse.mapH);
+            newX = Helper.getRandomInt(1, gameInstanse.mapW);
+            newY = Helper.getRandomInt(1, gameInstanse.mapH);
 
             let newLocation = gameInstanse.getGameMapLocation(newX, newY);
 
             isLocationValid = (newLocation == 1);
 
             if (isLocationValid == false) { continue; }
-
-            gameInstanse.enemies.forEach(enemy => {
-                if (enemy.posX == newX && enemy.posY == newY) {
-                    isLocationValid = false;
-                }
-            });
         }
 
         this._soundEf.playTeleport();
+
         gameInstanse.player.posX = newX;
         gameInstanse.player.posY = newY;
     }
@@ -46,24 +43,28 @@ export default class Bat extends EnemyUnit {
 
         let isLocationValid = false;
 
-        while (isLocationValid == false && i < 3) {
-            let rnd = this.getRandomInt(0, 4);
+        while (isLocationValid == false && i < 20) {
+            let rnd = Helper.getRandomInt(0, 4);
             newX = this.posX;
             newY = this.posY;
             i++;
 
             switch (rnd) {
                 case 0:
-                    newX += 1;
+                    newX -= 1;
+                    newY -= 1;
                     break;
                 case 1:
-                    newX -= 1;
+                    newX += 1;
+                    newY -= 1;
                     break;
                 case 2:
+                    newX -= 1;
                     newY += 1;
                     break;
                 case 3:
-                    newY -= 1;
+                    newX += 1;
+                    newY += 1;
                     break;
                 default:
 
@@ -72,7 +73,6 @@ export default class Bat extends EnemyUnit {
             }
 
             let newLocation = gameInstanse.getGameMapLocation(newX, newY);
-
             isLocationValid = (newLocation == 1);
 
             if (isLocationValid == false) { continue; }
