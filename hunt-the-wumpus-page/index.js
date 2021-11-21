@@ -1,13 +1,19 @@
 import Direction from "./Direction.js";
 import GameMap from "./game-objects/game-map.js";
 import Player from "./game-objects/player.js";
+import Pit from "./game-objects/pit.js";
 
-class Application {
+class Game {
 	run() {
-		this.player = new Player(3, 2);
 		const size = 5;
+		this.player = new Player(3, 2);
 
-		this.map = new GameMap(this.player, size);
+		const gameObjects = [];
+		gameObjects.push(this.player);
+		gameObjects.push(new Pit(0, 3));
+		gameObjects.push(new Pit(4, 1));
+
+		this.map = new GameMap(gameObjects, size);
 		this.#draw();
 
 		const controlsElement = document.getElementById('controls');
@@ -45,25 +51,42 @@ class Application {
 			return;
 		}
 
-		let roomWithPlayer = this.map.rooms[this.player.y][this.player.x];
-		roomWithPlayer.gameObject = null;
+		let room = this.map.rooms[this.player.y][this.player.x];
+		room.remove(this.player);
 
 		this.player.move(direction);
 
-		roomWithPlayer = this.map.rooms[this.player.y][this.player.x];
-		roomWithPlayer.gameObject = this.player;
+		room = this.map.rooms[this.player.y][this.player.x];
+		room.add(this.player);
 
-		this.#clean();
-		this.#draw();
+		this.#update();
 	}
 
 	attack(direction) {
 		console.log(direction);
 
 		const arrow = this.player.attack(direction);
+		const room = this.map.rooms[arrow.y][arrow.x];
+		room.add(arrow);
 
-		// this.#clean();
-		// this.#draw();
+		this.#update();
+	}
+
+	#update() {
+		const room = this.map.rooms[this.player.y][this.player.x];
+		const pit = room.getObject(x => x instanceof Pit);
+
+		if (pit) {
+			this.player.die();
+		}
+
+		if (!this.player.isAlive) {
+			const result = confirm("Ты проиграл!\nПопробуешь еще раз?");
+			console.log(result);
+		}
+
+		this.#clean();
+		this.#draw();
 	}
 
 	#draw() {
@@ -128,7 +151,7 @@ class Application {
 	}
 }
 
-const app = new Application();
+const app = new Game();
 app.run();
 
 document.app = app;

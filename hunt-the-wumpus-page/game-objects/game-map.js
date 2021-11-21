@@ -1,10 +1,17 @@
+import GameObject from "./game-object.js";
 import Player from "./player.js";
 import Room from "./room.js";
 
 export default class GameMap {
-	constructor(player, size) {
-		if (!player || player instanceof Player == false) {
-			throw new Error('argument player cannot be null or undefiend!');
+	constructor(gameObjects, size) {
+		if (!gameObjects && gameObjects.length == 0) {
+			throw new Error('argument gameObjects cannot be null or undefiend!');
+		}
+
+		for (const gameObject of gameObjects) {
+			if (gameObject instanceof GameObject == false) {
+				throw new Error('argument player cannot be null or undefiend!');
+			}
 		}
 
 		this.rooms = [];
@@ -17,7 +24,10 @@ export default class GameMap {
 			}
 		}
 
-		this.rooms[player.y][player.x] = new Room(player);
+		for (const gameObject of gameObjects) {
+			const room = this.rooms[gameObject.y][gameObject.x];
+			room.add(gameObject);
+		}
 	}
 
 	render() {

@@ -13,6 +13,18 @@ export default class Player extends GameObject {
 		}
 
 		super(x, y);
+
+		this.#isAlive = true;
+	}
+
+	#isAlive = false;
+
+	get isAlive() {
+		return this.#isAlive;
+	}
+
+	die() {
+		this.#isAlive = false;
 	}
 
 	move(direction) {
