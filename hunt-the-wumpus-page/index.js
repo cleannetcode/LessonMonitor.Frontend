@@ -12,7 +12,9 @@ class Application {
 
 		const controlsElement = document.getElementById('controls');
 		const movementElement = this.#renderMovementControls();
+		const attackElement = this.#renderAttackControls();
 		controlsElement.prepend(movementElement);
+		controlsElement.append(attackElement);
 	}
 
 	move(direction) {
@@ -55,6 +57,15 @@ class Application {
 		this.#draw();
 	}
 
+	attack(direction) {
+		console.log(direction);
+
+		const arrow = this.player.attack(direction);
+
+		// this.#clean();
+		// this.#draw();
+	}
+
 	#draw() {
 		const gameElement = document.getElementById('game');
 		const mapElement = this.map.render();
@@ -86,10 +97,34 @@ class Application {
 	}
 
 	#createMovementButton(name, direction) {
-		const moveRightElement = document.createElement('button');
-		moveRightElement.onclick = () => this.move(direction);
-		moveRightElement.innerText = name;
-		return moveRightElement;
+		const movementButton = document.createElement('button');
+		movementButton.onclick = () => this.move(direction);
+		movementButton.innerText = name;
+		return movementButton;
+	}
+
+	#renderAttackControls() {
+		const attackElement = document.createElement('div');
+
+		const attackUpButton = this.#createAttackButton('Up', Direction.up);
+		const attackDownButton = this.#createAttackButton('Down', Direction.down);
+		const attackLeftButton = this.#createAttackButton('Left', Direction.left);
+		const attackRightButton = this.#createAttackButton('Right', Direction.right);
+
+		const nameAttackElement = document.createElement('p');
+		nameAttackElement.innerText = 'Стрельба';
+
+		attackElement.append(nameAttackElement);
+		attackElement.append(attackLeftButton, attackDownButton, attackUpButton, attackRightButton);
+
+		return attackElement;
+	}
+
+	#createAttackButton(name, direction) {
+		const attackButton = document.createElement('button');
+		attackButton.onclick = () => this.attack(direction);
+		attackButton.innerText = name;
+		return attackButton;
 	}
 }
 

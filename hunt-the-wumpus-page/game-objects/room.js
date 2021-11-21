@@ -1,7 +1,11 @@
-import Player from "./player.js";
+import GameObject from "./game-object.js";
 
 export default class Room {
 	constructor(gameObject) {
+		if (gameObject && gameObject instanceof GameObject == false) {
+			throw new Error('Room can be created only with instance of GameObject.');
+		}
+
 		this.gameObject = gameObject;
 	}
 
@@ -11,8 +15,9 @@ export default class Room {
 		const roomElement = document.createElement('div');
 		roomElement.classList.add('room');
 
-		if (this.gameObject && this.gameObject instanceof Player) {
-			roomElement.classList.add('player');
+		if (this.gameObject) {
+			const objectElement = this.gameObject.render();
+			roomElement.append(objectElement);
 		}
 
 		return roomElement;
