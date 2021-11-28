@@ -1,6 +1,6 @@
 import GameObject from "./game-object.js";
-import Player from "./player.js";
 import Room from "./room.js";
+import Direction from "../Direction.js";
 
 export default class GameMap {
 	constructor(gameObjects, size) {
@@ -27,6 +27,40 @@ export default class GameMap {
 		for (const gameObject of gameObjects) {
 			const room = this.rooms[gameObject.y][gameObject.x];
 			room.add(gameObject);
+		}
+	}
+
+	/**
+	 *
+	 * @param {Direction} direction
+	 * @param {GameObject} gameObject
+	 * @returns
+	 */
+	isValidDirection(gameObject, direction) {
+
+		if (!direction) {
+			throw Error('direction cannot be null or undefined');
+		}
+
+		if (!gameObject || !gameObject instanceof GameObject) {
+			throw Error('gameObject should be instance of GameObject');
+		}
+
+		switch (direction) {
+			case Direction.up:
+				return gameObject.y > 0;
+
+			case Direction.down:
+				return gameObject.y < (this.size - 1);
+
+			case Direction.left:
+				return gameObject.x > 0;
+
+			case Direction.right:
+				return gameObject.x < (this.size - 1);
+
+			default:
+				return false;
 		}
 	}
 

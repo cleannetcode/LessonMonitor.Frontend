@@ -2,16 +2,23 @@ import Direction from "./Direction.js";
 import GameMap from "./game-objects/game-map.js";
 import Player from "./game-objects/player.js";
 import Pit from "./game-objects/pit.js";
+import Bats from "./game-objects/bats.js";
+import Wumpus from "./game-objects/wumpus.js";
+import MoveableObject from "./game-objects/moveable-object.js";
 
 class Game {
 	run() {
 		const size = 5;
 		this.player = new Player(3, 2);
+		this.wumpus = new Wumpus(1, 1);
 
 		const gameObjects = [];
 		gameObjects.push(this.player);
 		gameObjects.push(new Pit(0, 3));
 		gameObjects.push(new Pit(4, 1));
+		gameObjects.push(new Bats(3, 0));
+		gameObjects.push(new Bats(2, 3));
+		gameObjects.push(this.wumpus);
 
 		this.map = new GameMap(gameObjects, size);
 		this.#draw();
@@ -24,60 +31,78 @@ class Game {
 	}
 
 	move(direction) {
+		this.#moveGameObject(this.player, direction);
+
+		this.#update();
+		this.#redraw();
+	}
+
+	#moveGameObject(moveableObject, direction) {
 		console.log('x: ' + (this.player.x + 1), 'y: ' + (this.player.y + 1));
-		let movable = false;
-		switch (direction) {
-			case Direction.up:
-				movable = this.player.y > 0;
-				break;
 
-			case Direction.down:
-				movable = this.player.y < (this.map.size - 1);
-				break;
-
-			case Direction.left:
-				movable = this.player.x > 0;
-				break;
-
-			case Direction.right:
-				movable = this.player.x < (this.map.size - 1);
-				break;
-
-			default:
-				break;
+		if (!direction) {
+			throw Error('direction cannot be null or undefined');
 		}
 
-		if (!movable) {
+		if (!moveableObject || !moveableObject instanceof MoveableObject) {
+			throw Error('only MoveableObject can be moved by Game.moveGameObject');
+		}
+
+		if (!this.map.isValidDirection(moveableObject, direction)) {
 			return;
 		}
 
-		let room = this.map.rooms[this.player.y][this.player.x];
-		room.remove(this.player);
+		let room = this.map.rooms[moveableObject.y][moveableObject.x];
+		room.remove(moveableObject);
 
-		this.player.move(direction);
+		moveableObject.move(direction);
 
-		room = this.map.rooms[this.player.y][this.player.x];
-		room.add(this.player);
-
-		this.#update();
+		room = this.map.rooms[moveableObject.y][moveableObject.x];
+		room.add(moveableObject);
 	}
 
 	attack(direction) {
-		console.log(direction);
-
 		const arrow = this.player.attack(direction);
 		const room = this.map.rooms[arrow.y][arrow.x];
 		room.add(arrow);
 
 		this.#update();
+		this.#redraw();
 	}
 
 	#update() {
 		const room = this.map.rooms[this.player.y][this.player.x];
-		const pit = room.getObject(x => x instanceof Pit);
 
-		if (pit) {
+		const wumpus = room.getObject(x => x instanceof Wumpus);
+		const pit = room.getObject(x => x instanceof Pit);
+		const bats = room.getObject(x => x instanceof Bats);
+
+		if (wumpus || pit) {
 			this.player.die();
+		} else if (bats) {
+			const x = Math.floor(Math.random() * this.map.size);
+			const y = Math.floor(Math.random() * this.map.size);
+
+			let room = this.map.rooms[this.player.y][this.player.x];
+			room.remove(this.player);
+
+			this.player.x = x;
+			this.player.y = y;
+
+			room = this.map.rooms[this.player.y][this.player.x];
+			room.add(this.player);
+
+			this.#update();
+		}
+
+		const isWumpusSleep = Math.round(Math.random());
+		if (!isWumpusSleep) {
+			this.#moveGameObject(this.wumpus, Direction.random);
+			const room = this.map.rooms[this.wumpus.y][this.wumpus.x];
+			const player = room.getObject(x => x instanceof Player);
+			if (player) {
+				this.player.die();
+			}
 		}
 
 		if (!this.player.isAlive) {
@@ -85,6 +110,13 @@ class Game {
 			console.log(result);
 		}
 
+		if (!this.wumpus.isAlive) {
+			const result = confirm("Ты победил!\nПопробуешь еще раз?");
+			console.log(result);
+		}
+	}
+
+	#redraw() {
 		this.#clean();
 		this.#draw();
 	}

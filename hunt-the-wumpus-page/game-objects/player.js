@@ -1,17 +1,9 @@
 import Direction from "../Direction.js";
 import Arrow from "./arrow.js";
-import GameObject from "./game-object.js";
+import MoveableObject from "./moveable-object.js";
 
-export default class Player extends GameObject {
+export default class Player extends MoveableObject {
 	constructor(x, y) {
-		if (!x || x < 0) {
-			throw new Error('player\'s x cannot be less than zero');
-		}
-
-		if (!y || y < 0) {
-			throw new Error('player\'s y cannot be less than zero');
-		}
-
 		super(x, y);
 
 		this.#isAlive = true;
@@ -25,29 +17,6 @@ export default class Player extends GameObject {
 
 	die() {
 		this.#isAlive = false;
-	}
-
-	move(direction) {
-		switch (direction) {
-			case Direction.up:
-				this.y--;
-				break;
-
-			case Direction.down:
-				this.y++;
-				break;
-
-			case Direction.left:
-				this.x--;
-				break;
-
-			case Direction.right:
-				this.x++;
-				break;
-
-			default:
-				break;
-		}
 	}
 
 	attack(direction) {

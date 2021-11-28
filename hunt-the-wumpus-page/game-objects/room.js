@@ -37,6 +37,10 @@ export default class Room {
 	}
 
 	getObject(predicat) {
+		if (!predicat) {
+			throw new Error('predicat cannot be null or undefined');
+		}
+
 		return this.#gameObjects.find(predicat);
 	}
 
