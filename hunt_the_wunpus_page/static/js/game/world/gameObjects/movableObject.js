@@ -2,7 +2,7 @@ import Coordinates from "../coordinates.js";
 import GameObject from "./gameObject.js";
 
 export default class MovableObject extends GameObject {
-    #collisionEvent
+    #collisionEvent;
 
     constructor(name, coordinates, collisionEvent) {
         super(name, coordinates);

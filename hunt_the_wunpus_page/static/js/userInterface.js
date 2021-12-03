@@ -1,4 +1,4 @@
-import Direction from "./game/direction.js";
+import Direction from "./game/world/direction.js";
 import Game from "./game/game.js";
 import View from "./view/view.js";
 
@@ -20,60 +20,26 @@ export default class UserInterface {
     }
 
     #addMoveEventToBtns() {
-        this.#createMoveAction('LMoveBtn', Direction.left);
-        this.#createMoveAction('RMoveBtn', Direction.right);
-        this.#createMoveAction('UMoveBtn', Direction.up);
-        this.#createMoveAction('DMoveBtn', Direction.down);
-    }
-
-    #createMoveAction(btnName, direction) {
-        const btn = document.getElementById(btnName);
-        btn.addEventListener('click', () => {
-            if (this.#movePlayer(this.#game.player, this.#game.map, direction)) {
-                this.#update();
-            }
-        });
-    }
-
-    #movePlayer(player, map, direction) {
-        if (isNaN(direction) || direction < 0) {
-            throw Error('direction should be Number and greater then 0');
-        }
-
-        if (map.isValidDirectionFor(player.coordinates, direction, 1)) {
-            const room = map.getNextRoomByDirection(player.coordinates, direction, 1);
-            player.moveTo(room.coordinates);
-            return true;
-        }
-        return true;
+        this.#createBtnAction('LMoveBtn', Direction.left, this.#game.world.player.moveInterface);
+        this.#createBtnAction('RMoveBtn', Direction.right, this.#game.world.player.moveInterface);
+        this.#createBtnAction('UMoveBtn', Direction.up, this.#game.world.player.moveInterface);
+        this.#createBtnAction('DMoveBtn', Direction.down, this.#game.world.player.moveInterface);
     }
 
     #addAttackEventToBtns() {
-        this.#createAttackAction('LAttackBtn', Direction.left);
-        this.#createAttackAction('RAttackBtn', Direction.right);
-        this.#createAttackAction('UAttackBtn', Direction.up);
-        this.#createAttackAction('DAttackBtn', Direction.down);
+        this.#createBtnAction('LAttackBtn', Direction.left, this.#game.world.player.attackInterface);
+        this.#createBtnAction('RAttackBtn', Direction.right, this.#game.world.player.attackInterface);
+        this.#createBtnAction('UAttackBtn', Direction.up, this.#game.world.player.attackInterface);
+        this.#createBtnAction('DAttackBtn', Direction.down, this.#game.world.player.attackInterface);
     }
 
-    #createAttackAction(btnName, direction) {
+    #createBtnAction(btnName, direction, action) {
         const btn = document.getElementById(btnName);
         btn.addEventListener('click', () => {
-            if (this.#attack(this.#game.player, this.#game.map, direction)) {
+            if (action(direction)) {
                 this.#update();
             }
         });
-    }
-
-    #attack(player, map, direction) {
-        if (isNaN(direction) || direction < 0) {
-            throw Error('direction should be Number and greater then 0');
-        }
-        if (map.isValidDirectionFor(player.coordinates, direction, 1)) {
-            const room = map.getNextRoomByDirection(player.coordinates, direction, 1);
-            player.arrow.attack(room.coordinates);
-            return true;
-        }
-        return false;
     }
 
     #update() {

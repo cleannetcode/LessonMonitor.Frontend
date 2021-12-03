@@ -1,5 +1,3 @@
-import Direction from "./direction.js";
-
 export default class Coordinates {
     #x = -1;
     #y = -1;
@@ -32,31 +30,15 @@ export default class Coordinates {
         if (!oldCoordinates || !oldCoordinates instanceof Coordinates) {
 			throw Error('oldCoordinates should be instance of Coordinates');
 		}
-        if (isNaN(direction) || direction < 0) {
-			throw Error('direction cannot be null or undefined');
+        if (!direction || !direction instanceof Coordinates) {
+			throw Error('direction should be instance of Coordinates');
 		}
         if (isNaN(range) || range < 0) {
 			throw Error('range cannot be null or undefined');
 		}
 
-        let x = oldCoordinates.x;
-        let y = oldCoordinates.y;
-		switch (direction) {
-			case Direction.up:
-				y = y - range;
-                break;
-			case Direction.down:
-				y = y + range;
-                break;
-			case Direction.left:
-				x = x - range;
-                break;
-			case Direction.right:
-				x = x + range;
-                break;
-			default:
-				break;
-		}
+        let x = oldCoordinates.x + direction.x * range;
+        let y = oldCoordinates.y + direction.y * range;
         return new Coordinates(x, y);
     }
 }

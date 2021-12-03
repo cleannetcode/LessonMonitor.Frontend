@@ -1,47 +1,33 @@
-import Map from "../game/map/map.js";
-import Coordinates from "../game/coordinates.js";
+import World from "../game/world/world.js";
 
 export default class MapView {
-    #map;
+    #world;
 
-    constructor(map) {
-        if (!map || !map instanceof Map) {
-            throw new Error("map should be instance of Map.")
+    constructor(world) {
+        if (!world || !world instanceof World) {
+            throw new Error("world should be instance of Map.")
         }
-        this.#map = map;
+        this.#world = world;
     }
 
     update() {
-        const mapElement = document.getElementById('map');
+        const mapElement = document.getElementById('world');
 		mapElement.innerHTML = "";
-        for (let y = 0; y < this.#map.height; y++) {
+        for (let y = 0; y < this.#world.size.y; y++) {
             const rowElement = document.createElement('div');
             rowElement.className = 'row';
-            for (let x = 0; x < this.#map.width; x++) {
-                const coordinates = new Coordinates(x, y);
-                const room = this.#map.getRoom(coordinates);
-                const roomElement = this.#createRoomElement(room);
+            for (let x = 0; x < this.#world.size.x; x++) {
+                const roomElement = this.#createTileElement(x, y);
                 rowElement.append(roomElement);
             }    
             mapElement.append(rowElement);       
         } 
     }
 
-    #createRoomElement(room) {
+    #createTileElement(x, y) {
         const element = document.createElement('div');
-		element.setAttribute('id', 'room_' + room.coordinates.x + '_' + room.coordinates.y);
-        this.#debugView(room, element);
-		return element;
-    }
-    
-    #debugView(room, element) {
+		element.setAttribute('id', 'room_' + x + '_' + y);
         element.classList.add('room');
-        switch (room.type) {
-            case 1:
-                element.classList.add('pit');
-                break;		
-            default:
-                break;
-        }
+        return element;
     }
 }

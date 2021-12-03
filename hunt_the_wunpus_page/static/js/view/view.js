@@ -14,16 +14,16 @@ export default class View {
     #batsView;
     #endingMessage;
 
-    constructor(game) {
+    constructor(game, debug) {
         if (!game || !game instanceof Game) {
             throw new Error("game should be instance of Game.")
         }
-        this.#mapView = new MapView(game.map);
-        this.#playerView = new PlayerView(game.player);
-        this.#endingMessage = new EndingMessage(game.player, game.wumpus);
-        this.#pitsView = new PitsView(game.map, game.player);
-        this.#batsView = new BatsView(game.bats, game.player);
-        this.#wumpusView = new WumpusView(game.wumpus, game.player);
+        this.#mapView = new MapView(game.world);
+        this.#playerView = new PlayerView(game.world.player);
+        this.#endingMessage = new EndingMessage(game.world.player, game.world.wumpus);
+        this.#pitsView = new PitsView(game.world, game.world.player, debug);
+        this.#batsView = new BatsView(game.world.bats, game.world.player, debug);
+        this.#wumpusView = new WumpusView(game.world.wumpus, game.world.player, debug);
         this.update();
     }
 

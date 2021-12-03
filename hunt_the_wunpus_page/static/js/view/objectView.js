@@ -1,5 +1,5 @@
-import GameObject from "../game/gameObjects/gameObject.js";
-import Player from "../game/gameObjects/player.js";
+import GameObject from "../game/world/gameObjects/gameObject.js";
+import Player from "../game/world/gameObjects/player/player.js";
 
 export default class ObjectView {
     #gameObject;

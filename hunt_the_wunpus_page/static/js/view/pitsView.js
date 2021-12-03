@@ -1,20 +1,22 @@
-import Map from "../game/map/map.js";
-import Player from "../game/gameObjects/player.js";
+import World from "../game/world/world.js";
+import Player from "../game/world/gameObjects/player/player.js";
 
 export default class PitsView {
-    #map;
+    #world;
     #player;
     #viewBox;
+    #debug;
 
-    constructor(map, player) {
-        if (!map || !map instanceof Map) {
-            throw new Error("map should be instance of Map.")
+    constructor(world, player, debug) {
+        if (!world || !world instanceof World) {
+            throw new Error("world should be instance of Map.")
         }
         if (!player || !player instanceof Player) {
             throw new Error("player should be instance of Player.")
         }
-        this.#map = map;
+        this.#world = world;
         this.#player = player;
+        this.#debug = debug;
         this.#createViewBox();
     }
 
@@ -26,11 +28,23 @@ export default class PitsView {
 
     update() {
         this.#viewBox.innerHTML = "";
-        for (let i = 0; i < this.#map.pitCount; i++) {
-            const pit = this.#map.getPit(i);
+        for (let i = 0; i < this.#world.pitCount; i++) {
+            const pit = this.#world.getPit(i);
             if (pit.coordinates.distanceTo(this.#player.coordinates) == 1) {
-                this.#viewBox.innerHTML= "Вы чувствуете скозняк";
+                this.#viewBox.innerHTML = "Вы чувствуете скозняк";
                 break;
+            }
+        }
+        this.#debugView();
+    }
+
+    #debugView() {
+        if (this.#debug) {
+            for (let i = 0; i < this.#world.pitCount; i++) {
+                const pitCoordinate = this.#world.getPit(i).coordinates;
+                const id = 'room_' + pitCoordinate.x + '_' + pitCoordinate.y;
+                const element = document.getElementById(id);
+                element.classList.add('pit');
             }
         }
     }

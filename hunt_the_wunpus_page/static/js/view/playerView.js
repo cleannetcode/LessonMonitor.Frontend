@@ -1,4 +1,4 @@
-import Player from "../game/gameObjects/player.js";
+import Player from "../game/world/gameObjects/player/player.js";
 
 export default class PlayerView {
     #player;

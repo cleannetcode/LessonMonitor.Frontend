@@ -1,5 +1,6 @@
-import Player from "../game/gameObjects/player.js";
-import Wumpus from "../game/gameObjects/wumpus.js";
+import ObjectName from "../game/world/gameObjects/objectName.js";
+import Player from "../game/world/gameObjects/player/player.js";
+import Wumpus from "../game/world/gameObjects/wumpus.js";
 
 export default class EndingMessage {
     #player;
@@ -30,10 +31,10 @@ export default class EndingMessage {
 
     #showDeadMessage() {
         switch (this.#player.killerName) {
-            case 'pit':
+            case ObjectName.pit:
                 this.#viewElement.innerHTML += "Вы упали в яму. ";
                 break;
-            case 'wumpus':
+            case ObjectName.wumpus:
                 this.#viewElement.innerHTML += "Вас съел Вампус. ";
                 break;
             default:
