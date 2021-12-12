@@ -8,38 +8,91 @@ import MoveableObject from "./game-objects/moveable-object.js";
 
 class Game {
 	run() {
-		const size = 5;
-		this.player = new Player(3, 2);
-		this.wumpus = new Wumpus(1, 1);
-
-		const gameObjects = [];
-		gameObjects.push(this.player);
-		gameObjects.push(new Pit(0, 3));
-		gameObjects.push(new Pit(4, 1));
-		gameObjects.push(new Bats(3, 0));
-		gameObjects.push(new Bats(2, 3));
-		gameObjects.push(this.wumpus);
-
-		this.map = new GameMap(gameObjects, size);
-		this.#draw();
-
 		const controlsElement = document.getElementById('controls');
 		const movementElement = this.#renderMovementControls();
 		const attackElement = this.#renderAttackControls();
 		controlsElement.prepend(movementElement);
 		controlsElement.append(attackElement);
+
+		this.#setupKeyControls();
+
+		this.#start();
+		this.#updateGameInfo();
+		this.#draw();
 	}
 
 	move(direction) {
+		if (!this.player.isAlive) {
+			return;
+		}
+
 		this.#moveGameObject(this.player, direction);
 
 		this.#update();
 		this.#redraw();
 	}
 
-	#moveGameObject(moveableObject, direction) {
-		console.log('x: ' + (this.player.x + 1), 'y: ' + (this.player.y + 1));
+	attack(direction) {
+		if (!this.player.isAlive) {
+			return;
+		}
 
+		const arrow = this.player.attack(direction);
+
+		if (arrow.x == this.wumpus.x && arrow.y == this.wumpus.y) {
+			this.wumpus.die();
+		}
+
+		this.#update();
+		this.#redraw();
+	}
+
+	#start() {
+		const size = 5;
+
+		let possibleCoordinates = [];
+		let coordinate = {x:0, y:0};
+
+		for (let x = 0; x < size; x++) {
+			for (let y = 0; y < size; y++) {
+				possibleCoordinates.push({x, y});
+			}
+		}
+
+		({ coordinate, possibleCoordinates } = this.#getRandomCoordinate(possibleCoordinates));
+		this.player = new Player(coordinate.x, coordinate.y);
+
+		({ coordinate, possibleCoordinates } = this.#getRandomCoordinate(possibleCoordinates));
+		this.wumpus = new Wumpus(coordinate.x, coordinate.y);
+
+		const gameObjects = [];
+		gameObjects.push(this.player);
+		gameObjects.push(this.wumpus);
+
+		for (let i = 0; i < 2; i++) {
+			({ coordinate, possibleCoordinates } = this.#getRandomCoordinate(possibleCoordinates))
+			gameObjects.push(new Pit(coordinate.x, coordinate.y));
+			({ coordinate, possibleCoordinates } = this.#getRandomCoordinate(possibleCoordinates))
+			gameObjects.push(new Bats(coordinate.x, coordinate.y));
+		}
+
+		this.map = new GameMap(gameObjects, size);
+	}
+
+	#getRandomCoordinate(possibleCoordinates) {
+		const indexOfCoordinate = Math.round(Math.random() * (possibleCoordinates.length - 1));
+		const coordinate = possibleCoordinates[indexOfCoordinate];
+		possibleCoordinates = possibleCoordinates.filter((_, index) => index != indexOfCoordinate);
+		return { coordinate, possibleCoordinates };
+	}
+
+	#restart() {
+		this.#start();
+		this.#updateGameInfo();
+		this.#redraw();
+	}
+
+	#moveGameObject(moveableObject, direction) {
 		if (!direction) {
 			throw Error('direction cannot be null or undefined');
 		}
@@ -52,68 +105,74 @@ class Game {
 			return;
 		}
 
-		let room = this.map.rooms[moveableObject.y][moveableObject.x];
+		let room = this.map.getRoom(moveableObject.x, moveableObject.y);
 		room.remove(moveableObject);
 
 		moveableObject.move(direction);
 
-		room = this.map.rooms[moveableObject.y][moveableObject.x];
+		room = this.map.getRoom(moveableObject.x, moveableObject.y);
 		room.add(moveableObject);
-	}
 
-	attack(direction) {
-		const arrow = this.player.attack(direction);
-		const room = this.map.rooms[arrow.y][arrow.x];
-		room.add(arrow);
-
-		this.#update();
-		this.#redraw();
+		console.log(`player (${this.player.x}, ${this.player.y})`);
 	}
 
 	#update() {
-		const room = this.map.rooms[this.player.y][this.player.x];
+		if (!this.player.isAlive) {
+			const result = confirm("Ты проиграл!\nПопробуешь еще раз?");
 
-		const wumpus = room.getObject(x => x instanceof Wumpus);
-		const pit = room.getObject(x => x instanceof Pit);
-		const bats = room.getObject(x => x instanceof Bats);
+			if (result) {
+				this.#restart()
+			}
+
+			return;
+		}
+
+		if (!this.wumpus.isAlive) {
+			const result = confirm("Ты победил!\nПопробуешь еще раз?");
+
+			if (result) {
+				this.#restart()
+			}
+
+			return;
+		}
+
+		const roomWithPlayer = this.map.getRoom(this.player.x, this.player.y);
+
+		const wumpus = roomWithPlayer.getObject(x => x instanceof Wumpus);
+		const pit = roomWithPlayer.getObject(x => x instanceof Pit);
+		const bats = roomWithPlayer.getObject(x => x instanceof Bats);
 
 		if (wumpus || pit) {
 			this.player.die();
+			this.#update();
 		} else if (bats) {
 			const x = Math.floor(Math.random() * this.map.size);
 			const y = Math.floor(Math.random() * this.map.size);
 
-			let room = this.map.rooms[this.player.y][this.player.x];
+			let room = this.map.getRoom(this.player.x, this.player.y);
 			room.remove(this.player);
 
 			this.player.x = x;
 			this.player.y = y;
 
-			room = this.map.rooms[this.player.y][this.player.x];
+			room = this.map.getRoom(this.player.x, this.player.y);
 			room.add(this.player);
-
 			this.#update();
-		}
-
-		const isWumpusSleep = Math.round(Math.random());
-		if (!isWumpusSleep) {
-			this.#moveGameObject(this.wumpus, Direction.random);
-			const room = this.map.rooms[this.wumpus.y][this.wumpus.x];
-			const player = room.getObject(x => x instanceof Player);
-			if (player) {
-				this.player.die();
+		} else {
+			const isWumpusSleep = Math.round(Math.random());
+			if (!isWumpusSleep) {
+				this.#moveGameObject(this.wumpus, Direction.random);
+				const roomWithWumpus = this.map.getRoom(this.wumpus.x, this.wumpus.y);
+				const player = roomWithWumpus.getObject(x => x instanceof Player);
+				if (player) {
+					this.player.die();
+					this.#update();
+				}
 			}
 		}
 
-		if (!this.player.isAlive) {
-			const result = confirm("Ты проиграл!\nПопробуешь еще раз?");
-			console.log(result);
-		}
-
-		if (!this.wumpus.isAlive) {
-			const result = confirm("Ты победил!\nПопробуешь еще раз?");
-			console.log(result);
-		}
+		this.#updateGameInfo();
 	}
 
 	#redraw() {
@@ -125,6 +184,48 @@ class Game {
 		const gameElement = document.getElementById('game');
 		const mapElement = this.map.render();
 		gameElement.prepend(mapElement);
+	}
+
+	#updateGameInfo() {
+		let gameObjects = [];
+
+		for (let x = this.player.x - 1; x <= this.player.x + 1; x++) {
+			for (let y = this.player.y - 1; y <= this.player.y + 1; y++) {
+
+				if (x == this.player.x && y == this.player.y) {
+					continue;
+				}
+
+				if (x < 0 || y < 0 || x >= this.map.size || y >= this.map.size) {
+					continue;
+				}
+
+				const room = this.map.getRoom(x, y);
+				gameObjects.push(...room.getObjects());
+			}
+		}
+
+		const wumpusInfoElement = document.getElementById('wumpus-info');
+		const batsInfoElement = document.getElementById('bats-info');
+		const pitInfoElement = document.getElementById('pit-info');
+
+		pitInfoElement.className = "hide";
+		batsInfoElement.className = "hide";
+		wumpusInfoElement.className = "hide";
+
+		for (const gameObject of gameObjects) {
+			if (gameObject instanceof Pit) {
+				pitInfoElement.className = "";
+			}
+
+			if (gameObject instanceof Bats) {
+				batsInfoElement.className = "";
+			}
+
+			if (gameObject instanceof Wumpus) {
+				wumpusInfoElement.className = "";
+			}
+		}
 	}
 
 	#clean() {
@@ -156,6 +257,62 @@ class Game {
 		movementButton.onclick = () => this.move(direction);
 		movementButton.innerText = name;
 		return movementButton;
+	}
+
+	#setupKeyControls() {
+
+		window.onkeydown = (e) => {
+			switch (e.code) {
+				case "ArrowUp":
+				case "ArrowDown":
+				case "ArrowRight":
+				case "ArrowLeft":
+					e.preventDefault();
+					break;
+
+				default:
+					break;
+			}
+		}
+
+		window.onkeyup = (e) => {
+			if (e.defaultPrevented) {
+				return;
+			}
+
+			switch (e.code) {
+				case "ArrowUp":
+					this.move(Direction.up);
+					break;
+				case "ArrowDown":
+					this.move(Direction.down);
+					break;
+				case "ArrowRight":
+					this.move(Direction.right);
+					break;
+				case "ArrowLeft":
+					this.move(Direction.left);
+					break;
+
+				case "KeyW":
+					this.attack(Direction.up);
+					break;
+				case "KeyA":
+					this.attack(Direction.left);
+					break;
+				case "KeyD":
+					this.attack(Direction.right);
+					break;
+				case "KeyS":
+					this.attack(Direction.down);
+					break;
+
+				default:
+					break;
+			}
+
+			e.preventDefault();
+		}
 	}
 
 	#renderAttackControls() {

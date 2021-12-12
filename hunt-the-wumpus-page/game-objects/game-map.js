@@ -30,6 +30,10 @@ export default class GameMap {
 		}
 	}
 
+	getRoom(x, y) {
+		return this.rooms[y][x];
+	}
+
 	/**
 	 *
 	 * @param {Direction} direction

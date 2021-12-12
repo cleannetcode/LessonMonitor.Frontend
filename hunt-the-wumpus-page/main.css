@@ -20,7 +20,7 @@ body {
 	border: 4px solid black;
 }
 
-.info {
+#info {
 	color: bisque;
 	border: 4px solid black;
 	text-align: center;
@@ -46,27 +46,25 @@ body {
 	height: 100%;
 }
 
-.arrow {
-	background-color: red;
-	width: 100%;
-	height: 100%;
-}
-
 .pit {
-	background-color: chocolate;
+	/* background-color: chocolate; */
 	width: 100%;
 	height: 100%;
 }
 
 .wumpus {
-	background-color: aquamarine;
+	/* background-color: aquamarine; */
 	width: 100%;
 	height: 100%;
 }
 
 
 .bats {
-	background-color: darkred;
+	/* background-color: darkred; */
 	width: 100%;
 	height: 100%;
+}
+
+.hide {
+	display: none;
 }

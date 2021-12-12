@@ -1,6 +1,4 @@
 import GameObject from "./game-object.js";
-import Pit from "./pit.js";
-import Player from "./player.js";
 
 export default class Room {
 	constructor(gameObject) {
