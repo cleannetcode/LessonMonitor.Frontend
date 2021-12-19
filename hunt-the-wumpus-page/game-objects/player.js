@@ -3,6 +3,10 @@ import Arrow from "./arrow.js";
 import MoveableObject from "./moveable-object.js";
 
 export default class Player extends MoveableObject {
+	/**
+	 * @param {number} x
+	 * @param {number} y
+	 */
 	constructor(x, y) {
 		super(x, y);
 
@@ -19,7 +23,11 @@ export default class Player extends MoveableObject {
 		this.#isAlive = false;
 	}
 
-	attack(direction) {
+	/**
+	 * @param {Direction} direction
+	 * @returns
+	 */
+	shoot(direction) {
 		const attackRange = 1;
 
 		let x = 0;

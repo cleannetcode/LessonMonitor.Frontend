@@ -1,6 +1,9 @@
 import GameObject from "./game-object.js";
 
 export default class Room {
+	/**
+	 * @param {GameObject} gameObject
+	 */
 	constructor(gameObject) {
 		if (gameObject && gameObject instanceof GameObject == false) {
 			throw new Error('Room can be created only with instance of GameObject.');
@@ -11,8 +14,14 @@ export default class Room {
 		}
 	}
 
+	/**
+	 * @type {GameObject[]}
+	 */
 	#gameObjects = [];
 
+	/**
+	 * @param {GameObject} gameObject
+	 */
 	add(gameObject) {
 		if (!gameObject || gameObject instanceof GameObject == false) {
 			throw new Error('gameObject cannot be null and should be instance of GameObject.');
@@ -21,6 +30,9 @@ export default class Room {
 		this.#gameObjects.push(gameObject);
 	}
 
+	/**
+	 * @param {GameObject} gameObject
+	 */
 	remove(gameObject) {
 		if (!gameObject || gameObject instanceof GameObject == false) {
 			throw new Error('gameObject cannot be null and should be instance of GameObject.');
@@ -34,12 +46,19 @@ export default class Room {
 		return new Array(...this.#gameObjects);
 	}
 
-	getObject(predicat) {
-		if (!predicat) {
+	/**
+	 * @callback predicate
+	 * @param {GameObject} gameObject
+	 * @returns {boolean}
+	 *
+	 * @param {predicate} predicate - The callback that handles the response.
+	 */
+	getObject(predicate) {
+		if (!predicate) {
 			throw new Error('predicat cannot be null or undefined');
 		}
 
-		return this.#gameObjects.find(predicat);
+		return this.#gameObjects.find(predicate);
 	}
 
 	render() {
@@ -50,7 +69,9 @@ export default class Room {
 
 			for (const gameObject of this.#gameObjects) {
 				const objectElement = gameObject.render();
-				roomElement.append(objectElement);
+				if (objectElement) {
+					roomElement.append(objectElement);
+				}
 			}
 		}
 

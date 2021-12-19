@@ -3,6 +3,10 @@ import Room from "./room.js";
 import Direction from "../Direction.js";
 
 export default class GameMap {
+	/**
+	 * @param {GameObject[]} gameObjects
+	 * @param {number} size
+	 */
 	constructor(gameObjects, size) {
 		if (!gameObjects && gameObjects.length == 0) {
 			throw new Error('argument gameObjects cannot be null or undefiend!');
@@ -14,7 +18,14 @@ export default class GameMap {
 			}
 		}
 
+		/**
+		 * @type {Room[]}
+		 */
 		this.rooms = [];
+
+		/**
+		 * @type {number}
+		 */
 		this.size = size;
 
 		for (let y = 0; y < size; y++) {
@@ -30,15 +41,20 @@ export default class GameMap {
 		}
 	}
 
+	/**
+	 *
+	 * @param {number} x
+	 * @param {number} y
+	 * @returns {Room}
+	 */
 	getRoom(x, y) {
 		return this.rooms[y][x];
 	}
 
 	/**
-	 *
 	 * @param {Direction} direction
 	 * @param {GameObject} gameObject
-	 * @returns
+	 * @returns {boolean}
 	 */
 	isValidDirection(gameObject, direction) {
 
@@ -69,8 +85,7 @@ export default class GameMap {
 	}
 
 	render() {
-		const mapElement = document.createElement('div');
-		mapElement.id = 'map';
+		const mapElement = document.getElementById('map');
 
 		for (const row of this.rooms) {
 			const rowElement = document.createElement('div');

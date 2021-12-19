@@ -11,18 +11,23 @@
 </head>
 
 <body>
-	<div id="game">
-		<div id="controls">
+	<main>
+		<div id="game">
+			<div class="panel">
+				<div class="stats">
+					<p>Шаги: <span id="steps"></span></p>
+					<p>Стрел потрачен: <span id="shoots"></span></p>
+				</div>
+				<div id="info">
+					<p id="wumpus-info" class="hide">Вы чувствуете вонь</p>
+					<p id="bats-info" class="hide">Вы слышите шелест</p>
+					<p id="pit-info" class="hide">Вы чувствуете скозняк</p>
+				</div>
+			</div>
+			<div id="map"></div>
+			<div id="controls">
+			</div>
 		</div>
-		<div class="stats">
-			<p>Шаги: 0</p>
-			<p>Стрел потрачен: 0</p>
-		</div>
-		<div id="info">
-			<p id="wumpus-info" class="hide">Вы чувствуете вонь</p>
-			<p id="bats-info" class="hide">Вы слышите шелест</p>
-			<p id="pit-info" class="hide">Вы чувствуете скозняк</p>
-		</div>
-	</div>
+	</main>
 </body>
 </html>

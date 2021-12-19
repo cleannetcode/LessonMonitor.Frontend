@@ -2,6 +2,10 @@ import MoveableObject from "./moveable-object.js";
 import Direction from "../Direction.js";
 
 export default class Wumpus extends MoveableObject {
+	/**
+	 * @param {number} x
+	 * @param {number} y
+	 */
 	constructor(x, y) {
 		super(x, y);
 
@@ -18,6 +22,10 @@ export default class Wumpus extends MoveableObject {
 		this.#isAlive = false;
 	}
 
+	/**
+	 * @param {Direction} direction
+	 * @returns
+	 */
 	attack(direction) {
 		const attackRange = 1;
 
@@ -50,11 +58,5 @@ export default class Wumpus extends MoveableObject {
 		}
 
 		return new Arrow(x, y);
-	}
-
-	render() {
-		const element = document.createElement('div');
-		element.classList.add('wumpus');
-		return element;
 	}
 }

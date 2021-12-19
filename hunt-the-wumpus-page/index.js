@@ -5,8 +5,12 @@ import Pit from "./game-objects/pit.js";
 import Bats from "./game-objects/bats.js";
 import Wumpus from "./game-objects/wumpus.js";
 import MoveableObject from "./game-objects/moveable-object.js";
+import Footprint from "./game-objects/footprint.js";
 
 class Game {
+	#steps = 0;
+	#shoots = 0;
+
 	run() {
 		const controlsElement = document.getElementById('controls');
 		const movementElement = this.#renderMovementControls();
@@ -21,30 +25,56 @@ class Game {
 		this.#draw();
 	}
 
+	/**
+	 * @param {Direction} direction
+	 * @returns
+	 */
 	move(direction) {
 		if (!this.player.isAlive) {
 			return;
 		}
 
+		const x = this.player.x;
+		const y = this.player.y;
 		this.#moveGameObject(this.player, direction);
+		this.#placeFootprint(x, y);
+		this.#steps++;
 
 		this.#update();
 		this.#redraw();
 	}
 
+	/**
+	 * @param {Direction} direction
+	 * @returns
+	 */
 	attack(direction) {
 		if (!this.player.isAlive) {
 			return;
 		}
 
-		const arrow = this.player.attack(direction);
+		const arrow = this.player.shoot(direction);
 
 		if (arrow.x == this.wumpus.x && arrow.y == this.wumpus.y) {
 			this.wumpus.die();
 		}
 
+		this.#shoots++;
+
 		this.#update();
 		this.#redraw();
+	}
+
+	/**
+	 * @param {number} x
+	 * @param {number} y
+	 */
+	#placeFootprint(x, y) {
+		const room = this.map.getRoom(x, y);
+		const oldFootprint = room.getObject(x => x instanceof Footprint);
+		if(!oldFootprint) {
+			room.add(new Footprint(x, y));
+		}
 	}
 
 	#start() {
@@ -79,6 +109,9 @@ class Game {
 		this.map = new GameMap(gameObjects, size);
 	}
 
+	/**
+	 * @param {{x:0, y:0}[]} possibleCoordinates
+	 */
 	#getRandomCoordinate(possibleCoordinates) {
 		const indexOfCoordinate = Math.round(Math.random() * (possibleCoordinates.length - 1));
 		const coordinate = possibleCoordinates[indexOfCoordinate];
@@ -92,6 +125,11 @@ class Game {
 		this.#redraw();
 	}
 
+	/**
+	 * @param {MoveableObject} moveableObject
+	 * @param {Direction} direction
+	 * @returns
+	 */
 	#moveGameObject(moveableObject, direction) {
 		if (!direction) {
 			throw Error('direction cannot be null or undefined');
@@ -112,8 +150,6 @@ class Game {
 
 		room = this.map.getRoom(moveableObject.x, moveableObject.y);
 		room.add(moveableObject);
-
-		console.log(`player (${this.player.x}, ${this.player.y})`);
 	}
 
 	#update() {
@@ -181,9 +217,15 @@ class Game {
 	}
 
 	#draw() {
-		const gameElement = document.getElementById('game');
+		// const gameElement = document.getElementById('game');
 		const mapElement = this.map.render();
-		gameElement.prepend(mapElement);
+		// gameElement.prepend(mapElement);
+
+		const stepsElement = document.getElementById("steps");
+		stepsElement.innerText = this.#steps;
+
+		const shootsElement = document.getElementById("shoots");
+		shootsElement.innerText = this.#shoots;
 	}
 
 	#updateGameInfo() {
@@ -231,17 +273,22 @@ class Game {
 	#clean() {
 		const mapElement = document.getElementById('map');
 		if (mapElement) {
-			mapElement.remove();
+			mapElement.innerHTML = "";
 		}
 	}
 
 	#renderMovementControls() {
 		const movementElement = document.createElement('div');
+		movementElement.classList.add("control-keys");
 
 		const moveUpElement = this.#createMovementButton('Up', Direction.up);
+		moveUpElement.classList.add("up");
 		const moveDownElement = this.#createMovementButton('Down', Direction.down);
+		moveDownElement.classList.add("down");
 		const moveLeftElement = this.#createMovementButton('Left', Direction.left);
+		moveLeftElement.classList.add("left");
 		const moveRightElement = this.#createMovementButton('Right', Direction.right);
+		moveRightElement.classList.add("right");
 
 		const nameMovementElement = document.createElement('p');
 		nameMovementElement.innerText = 'Премещение';
@@ -252,6 +299,11 @@ class Game {
 		return movementElement;
 	}
 
+	/**
+	 * @param {string} name
+	 * @param {Direction} direction
+	 * @returns
+	 */
 	#createMovementButton(name, direction) {
 		const movementButton = document.createElement('button');
 		movementButton.onclick = () => this.move(direction);
@@ -317,11 +369,16 @@ class Game {
 
 	#renderAttackControls() {
 		const attackElement = document.createElement('div');
+		attackElement.classList.add("control-keys");
 
 		const attackUpButton = this.#createAttackButton('Up', Direction.up);
+		attackUpButton.classList.add("up");
 		const attackDownButton = this.#createAttackButton('Down', Direction.down);
+		attackDownButton.classList.add("down");
 		const attackLeftButton = this.#createAttackButton('Left', Direction.left);
+		attackLeftButton.classList.add("left");
 		const attackRightButton = this.#createAttackButton('Right', Direction.right);
+		attackRightButton.classList.add("right");
 
 		const nameAttackElement = document.createElement('p');
 		nameAttackElement.innerText = 'Стрельба';
