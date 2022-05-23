@@ -1,0 +1,330 @@
+body {
+  font-family: 'Eczar', serif;
+  margin-top: 15px;
+  background-color: #000;
+}
+
+.container {
+  max-width: 1140px;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.main {
+  margin-right: auto;
+  margin-left: auto;
+  width: 1100px;
+  height: 750px;
+  background-image: url(../img/background.jpg);
+  background-repeat: no-repeat;
+  background-position: center top;
+  border-radius: 5px;
+  box-shadow: 0px 1px 10px -3px rgba(244, 76, 68, 1) inset;
+}
+
+.main__title {
+  color: #eb4c4c;
+  text-align: center;
+  padding-top: 15px;
+  padding-bottom: 20px;
+  font-size: 32px;
+  font-weight: 600;
+  animation: pulsate 0.11s ease-in-out infinite alternate;
+}
+
+@keyframes pulsate {
+  100% {
+    text-shadow: 0 0 4px #000, 0 0 11px #000, 0 0 19px #000, 0 0 40px #eb4c4c, 0 0 80px #eb4c4c,
+      0 0 90px #eb4c4c, 0 0 100px #eb4c4c, 0 0 150px #eb4c4c;
+  }
+  0% {
+    text-shadow: 0 0 4px #000, 0 0 10px #000, 0 0 18px #000, 0 0 38px #eb4c4c, 0 0 73px #eb4c4c,
+      0 0 80px #eb4c4c, 0 0 94px #eb4c4c, 0 0 140px #eb4c4c;
+  }
+}
+
+.game-app {
+  display: flex;
+  height: 75%;
+  margin: 25px 95px 25px 95px;
+  background-color: #322e2e;
+  border-radius: 5px;
+}
+
+.game-section__left {
+  width: 30%;
+  margin: 10px 5px 10px 10px;
+  background-color: #4e3232;
+  border: 10px solid #351f1f;
+}
+
+.game-statistics {
+  height: 35%;
+}
+
+.game-statistics__title {
+  color: #eb4c4c;
+  text-align: center;
+  text-shadow: 2px 1px 0px #000;
+}
+
+.game-score {
+  color: #eb4c4c;
+  text-shadow: 2px 1px 0px #000;
+  text-decoration: none;
+  font-size: 19px;
+  list-style: none;
+}
+
+.game-controlls-block {
+  height: 33%;
+  display: block;
+  align-items: center;
+}
+
+.controlls-image {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.controlls-image__img {
+  width: 120px;
+}
+
+.button-block {
+  display: flex;
+  flex-direction: column;
+}
+
+.btn {
+  color: #972d2d;
+  text-align: center;
+  text-shadow: 2px 1px 0px #000;
+  background-color: #4e3232;
+  border: 5px solid #351f1f;
+  margin: 5px;
+  padding: 10px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.btn-start {
+  background-color: #442424;
+  animation-name: blinker;
+  animation-iteration-count: infinite;
+  animation-duration: 1.5s;
+}
+
+@keyframes blinker {
+  from {
+    opacity: 0.2;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.btn[disabled] {
+  color: #3a1b17;
+  background-color: #632a23;
+  animation-name: none;
+}
+
+.game-section__right {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: 70%;
+  margin: 10px 10px 10px 5px;
+  background-color: #4e3232;
+  border: 10px solid #351f1f;
+}
+
+.game-map {
+  position: relative;
+  flex-basis: 75%;
+  margin: 2px;
+  border: 3px solid #351f1f;
+}
+
+#canvas {
+  vertical-align: middle;
+}
+
+.game-log {
+  justify-content: flex-end;
+  flex-basis: 15%;
+  overflow-y: scroll;
+  scrollbar-color: #972d2d;
+  scrollbar-width: thin;
+}
+
+.game-log::-webkit-scrollbar {
+  width: 12px; /* width of the entire scrollbar */
+}
+
+.game-log::-webkit-scrollbar-track {
+  background: #972d2d; /* color of the tracking area */
+}
+
+.game-log::-webkit-scrollbar-thumb {
+  background-color: #351f1f; /* color of the scroll thumb */
+  border: 3px solid #972d2d; /* creates padding around scroll thumb */
+}
+
+.game-shoot-bar {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-basis: 10%;
+}
+
+.game-shoot-bar__title {
+  text-align: center;
+  color: #972d2d;
+  text-shadow: 2px 1px 0px #000;
+}
+
+.button-block__arrows {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+}
+
+.game-arrows {
+  flex-basis: 23%;
+  margin: 5px;
+  /* color: #972d2d;
+  font-size: 17px;
+  text-shadow: 2px 1px 0px #000; */
+  background-color: #4e3232;
+  border: 3px solid #351f1f;
+  cursor: pointer;
+  height: 34px;
+}
+
+.game-arrows:hover {
+  background-color: #9e4d4d7a;
+}
+
+.game-arrows[disabled] {
+  color: #3a1b17;
+  background-color: #632a23;
+}
+
+button:hover:enabled {
+  background-color: #552424;
+  color: #eb4c4c;
+  text-shadow: 2px 2px 0px rgba(0, 0, 0, 1);
+}
+
+.arrow {
+  display: inline-block;
+  border: solid #972d2d;
+  border-width: 0 3px 3px 0;
+  padding: 3px;
+  cursor: pointer;
+}
+
+.arrow-up {
+  transform: rotate(-135deg);
+}
+.arrow-down {
+  transform: rotate(45deg);
+}
+.arrow-left {
+  transform: rotate(135deg);
+}
+.arrow-right {
+  transform: rotate(-45deg);
+}
+
+.game-log {
+  background-color: #4e3232;
+  border: 3px solid #351f1f;
+  margin: 5px;
+  max-height: 55px;
+}
+
+.game-log__label {
+  display: block;
+  color: #972d2d;
+  text-shadow: 2px 1px 0px #000;
+  margin-left: 5px;
+}
+
+.game-log__text {
+  color: #4abe64;
+}
+
+.game-won {
+  display: none;
+  position: absolute;
+  left: 233px;
+  top: 149px;
+  color: #27a142;
+  text-align: center;
+  padding-top: 15px;
+  padding-bottom: 20px;
+  font-size: 32px;
+  font-weight: 600;
+  animation: pulsate-won 0.11s ease-in-out infinite alternate;
+}
+
+@keyframes pulsate-won {
+  100% {
+    text-shadow: 0 0 4px #000, 0 0 11px #000, 0 0 19px #000, 0 0 40px #27a142, 0 0 80px #27a142,
+      0 0 90px #27a142, 0 0 100px #27a142, 0 0 150px #27a142;
+  }
+  0% {
+    text-shadow: 0 0 20px #000, 0 0 10px #000, 0 0 18px #000, 0 0 38px #27a142, 0 0 73px #27a142,
+      0 0 80px #27a142, 0 0 94px #27a142, 0 0 140px #27a142;
+  }
+}
+
+.game-lose {
+  display: none;
+  position: absolute;
+  left: 233px;
+  top: 149px;
+  color: #be5b22;
+  text-align: center;
+  padding-top: 15px;
+  padding-bottom: 20px;
+  font-size: 32px;
+  font-weight: 600;
+  animation: pulsate-won 0.11s ease-in-out infinite alternate;
+}
+
+@keyframes pulsate-won {
+  100% {
+    text-shadow: 0 0 4px #000, 0 0 11px #000, 0 0 19px #000, 0 0 40px #c50f0f, 0 0 80px #c50f0f,
+      0 0 90px #c50f0f, 0 0 100px #c50f0f, 0 0 150px #c50f0f;
+  }
+  0% {
+    text-shadow: 0 0 20px #000, 0 0 10px #000, 0 0 18px #000, 0 0 38px #c50f0f, 0 0 73px #c50f0f,
+      0 0 80px #c50f0f, 0 0 94px #c50f0f, 0 0 140px #c50f0f;
+  }
+}
+
+/* .modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: rgb(25 18 18 / 0%) url('http://i.stack.imgur.com/FhHRx.gif') 50% 50% no-repeat;
+}
+
+body.loading .modal {
+  overflow: hidden;
+}
+
+body.loading .modal {
+  display: block;
+} */
